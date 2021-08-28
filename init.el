@@ -14,6 +14,7 @@
 (load "~/.emacs.d/conf/mylib/wordcase.el")
 (load "~/.emacs.d/conf/mylib/wordwrap.el")
 (load "~/.emacs.d/conf/view-mode.el")
+(load "~/.emacs.d/conf/use-package.el")
 
 (load "~/.emacs.d/conf/plantuml.el")
 
@@ -21,6 +22,7 @@
 (load "~/.emacs.d/conf/linter/ruby-mode.el")
 (load "~/.emacs.d/conf/linter/rspec-mode.el")
 (load "~/.emacs.d/conf/linter/rjsx-mode.el")
+(load "~/.emacs.d/conf/linter/mmm-mode.el")
 (load "~/.emacs.d/conf/linter/typescript-mode.el")
 (load "~/.emacs.d/conf/linter/markdown-mode.el")
 (load "~/.emacs.d/conf/linter/emacs-lisp-mode.el")
