@@ -37,3 +37,7 @@
 (define-key global-map (kbd "M-o") 'mark-sexp)
 (define-key global-map (kbd "C-q") 'toggle-truncate-lines)
 (define-key global-map (kbd "M-g") 'grep-find)
+
+(define-key global-map (kbd "C-x l") 'linum-mode)
+(define-key global-map (kbd "C-t")   'untabify)
+(define-key global-map (kbd "C-x C-g") 'goto-line)
