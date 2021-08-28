@@ -1,0 +1,26 @@
+(require 'package)
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(package-initialize)
+
+(load "~/.emacs.d/conf/basic.el")
+(load "~/.emacs.d/conf/basic-keybind.el")
+
+(load "~/.emacs.d/conf/helm.el")
+(load "~/.emacs.d/conf/swiper.el")
+(load "~/.emacs.d/conf/undo-tree.el")
+(load "~/.emacs.d/conf/ansi-term.el")
+(load "~/.emacs.d/conf/auto-complete.el")
+
+(load "~/.emacs.d/conf/mylib/wordcase.el")
+(load "~/.emacs.d/conf/mylib/wordwrap.el")
+(load "~/.emacs.d/conf/view-mode.el")
+
+(load "~/.emacs.d/conf/plantuml.el")
+
+(load "~/.emacs.d/conf/linter/web-mode.el")
+(load "~/.emacs.d/conf/linter/ruby-mode.el")
+(load "~/.emacs.d/conf/linter/rspec-mode.el")
+(load "~/.emacs.d/conf/linter/rjsx-mode.el")
+(load "~/.emacs.d/conf/linter/typescript-mode.el")
+(load "~/.emacs.d/conf/linter/markdown-mode.el")
+(load "~/.emacs.d/conf/linter/emacs-lisp-mode.el")

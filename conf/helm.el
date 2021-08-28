@@ -1,0 +1,26 @@
+(unless (require 'helm-config nil t) (package-refresh-contents) (package-install 'helm) (require 'helm-config))
+(helm-mode 1)
+(setq helm-autoresize-max-height 0)
+(setq helm-autoresize-min-height 20)
+
+; keybinds
+(define-key helm-map            (kbd "C-h") 'delete-backward-char)
+(define-key helm-find-files-map (kbd "C-h") 'delete-backward-char)
+(define-key helm-read-file-map  (kbd "C-h") 'delete-backward-char)
+(define-key helm-map            (kbd "TAB") 'helm-execute-persistent-action)
+(define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
+(define-key helm-read-file-map  (kbd "TAB") 'helm-execute-persistent-action)
+(define-key helm-map            (kbd "C-b") (kbd "C-l"))
+(define-key helm-find-files-map (kbd "C-b") (kbd "C-l"))
+(define-key helm-read-file-map  (kbd "C-b") (kbd "C-l"))
+(define-key helm-map            (kbd "C-f") (kbd "TAB"))
+(define-key helm-find-files-map (kbd "C-f") (kbd "TAB"))
+(define-key helm-read-file-map  (kbd "C-f") (kbd "TAB"))
+(define-key helm-map            (kbd "C-z") (kbd "C-g"))
+(define-key helm-find-files-map (kbd "C-z") (kbd "C-g"))
+(define-key helm-read-file-map  (kbd "C-z") (kbd "C-g"))
+
+(define-key global-map (kbd "C-x C-f") 'helm-find-files)
+(define-key global-map (kbd "C-x C-b") 'helm-mini)
+(define-key global-map (kbd "M-x")     'helm-M-x)
+(define-key global-map (kbd "M-y")     'helm-show-kill-ring) ; overrige yank-pop

@@ -1,0 +1,5 @@
+(add-hook 'emacs-lisp-mode-hook (lambda ()
+                                  (setq indent-tabs-mode nil)
+                                  (setq whitespace-style '(face trailing tabs tab-mark))
+                                  (setq tab-width 2)
+                                  ))
