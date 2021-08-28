@@ -9,15 +9,15 @@
   (mmm-add-classes
    '((vue-embeded-web-mode
       :submode html-mode
-      :front "^<template>"
+      :front "^<template.*>"
       :back "^</template>")
      (vue-embeded-js-mode
       :submode js-mode
-      :front "^<script>"
+      :front "^<script.*>"
       :back "^</script>")
      (vue-embeded-css-mode
       :submode css-mode
-      :front "^<style>"
+      :front "^<style.*>"
       :back "^</style>")))
 
   (mmm-add-mode-ext-class nil "\\.vue\\'" 'vue-embeded-web-mode)
