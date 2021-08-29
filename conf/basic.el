@@ -9,6 +9,7 @@
 (set-language-environment 'Japanese)  ;; 言語設定
 (prefer-coding-system 'utf-8)         ;; 文字コード設定
 (setq ring-bell-function 'ignore)     ;; beep抑止
+(setq make-backup-files nil)          ;; backupfile抑止
 
 ;; ホワイトスペース警告
 (setq whitespace-style '(face trailing tabs tab-mark))
