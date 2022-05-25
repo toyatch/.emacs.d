@@ -25,3 +25,4 @@
 (load "~/.emacs.d/conf/linter/typescript-mode.el")
 (load "~/.emacs.d/conf/linter/markdown-mode.el")
 (load "~/.emacs.d/conf/linter/emacs-lisp-mode.el")
+(load "~/.emacs.d/conf/linter/java-mode.el")
