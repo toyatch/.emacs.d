@@ -1,6 +1,6 @@
 #!/bin/sh
 
-emacs="emacs-27.2"
+emacs="emacs-28.1"
 
 sudo su -c "grep '^deb ' /etc/apt/sources.list | sed 's/^deb/deb-src/g' > /etc/apt/sources.list.d/deb-src.list"
 sudo apt update -y
