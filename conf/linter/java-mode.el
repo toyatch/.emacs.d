@@ -5,4 +5,5 @@
                             (setq tab-width 4)
                             (set-face-foreground 'whitespace-tab "gray33")
                             (set-face-background 'whitespace-tab nil)
+                            (lsp)
                             ))
