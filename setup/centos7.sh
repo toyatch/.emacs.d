@@ -1,6 +1,6 @@
 #!/bin/sh
 
-emacs="emacs-27.2"
+emacs="emacs-28.1"
 
 sudo yum update -y
 sudo yum -y groupinstall "Development Tools"
