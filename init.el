@@ -12,8 +12,6 @@
 ;;-----------------------------------------------------------------------------
 ;; basic
 ;;-----------------------------------------------------------------------------
-;;(tool-bar-mode 0)                   ;; ツールバー非表示
-;;(scroll-bar-mode 0)                 ;; スクロールバー非表示
 (load-theme 'wheatgrass)              ;; theme
 (setq inhibit-startup-screen t)       ;; スタートアップメッセージ非表示
 (menu-bar-mode 0)                     ;; メニューバー非表示
@@ -21,6 +19,8 @@
 (prefer-coding-system 'utf-8)         ;; 文字コード設定
 (setq ring-bell-function 'ignore)     ;; beep抑止
 (setq make-backup-files nil)          ;; backupfile抑止
+(tool-bar-mode 0)                     ;; ツールバー非表示
+(scroll-bar-mode 0)                   ;; スクロールバー非表示
 
 ;; whitespace
 (setq whitespace-style '(face trailing tabs tab-mark))
@@ -150,3 +150,56 @@
 ;; lsp-mode
 ;; ----------------------------------------------------------------------------
 (find-or-install-package 'lsp-mode)
+
+;; ----------------------------------------------------------------------------
+;; eshell-mode
+;; ----------------------------------------------------------------------------
+;; FIXME: CTRL ALTの入れ替えをしたい
+;; TODO: eshellのgit diffで色分けをしたい
+(define-key global-map (kbd "M-t") 'eshell)
+(add-hook 'eshell-mode-hook
+  (lambda ()
+   (setq whitespace-style '(face trailing tabs tab-mark))
+   (linum-mode 0)
+   ;;(define-key eshell-mode-map (kbd "C-p") 'eshell-previous-matching-input-from-input)
+   ;;(define-key eshell-mode-map (kbd "C-n") 'eshell-next-matching-input-from-input)
+   (define-key eshell-mode-map (kbd "C-r") 'helm-eshell-history)))
+
+;; ----------------------------------------------------------------------------
+;; TypeScripts
+;; ----------------------------------------------------------------------------
+;; tide & lsp(eslint)
+(find-or-install-package 'tide)
+(add-to-list 'auto-mode-alist '("\\/.*\\.ts\\'" . typescript-mode))
+(add-to-list 'auto-mode-alist '("\\/.*\\.tsx\\'" . typescript-mode))
+
+(add-hook 'typescript-mode-hook
+  (lambda ()
+    (setq indent-tabs-mode nil)
+    (setq typescript-indent-level 2) ;; default 4
+    (setq js2-strict-missing-semi-warning nil)
+    (setq whitespace-style '(face trailing tabs tab-mark))
+    (tide-setup)
+    (lsp t)
+    (flycheck-mode t)
+    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+    (add-node-modules-path)
+    ))
+
+;; preteer
+(find-or-install-package 'add-node-modules-path)
+(defun apply-prettier ()
+  (interactive)
+  (shell-command (format "%s --write %s"
+    (shell-quote-argument (executable-find "prettier"))
+    (shell-quote-argument (expand-file-name buffer-file-name))))
+  (revert-buffer t t t))
+(add-hook 'typescript-mode-hook
+  (lambda () (add-hook 'after-save-hook 'apply-prettier t t)))
+
+;; ----------------------------------------------------------------------------
+;; others
+;; ----------------------------------------------------------------------------
+(setq x-select-enable-clipboard t)
+
+;; EOF
