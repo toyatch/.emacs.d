@@ -155,12 +155,22 @@
 ;; FIXME: CTRL ALTの入れ替えをしたい
 ;; TODO: eshellのgit diffで色分けをしたい
 (define-key global-map (kbd "M-t") 'eshell)
+
+(defun recenter-with-highlight-diff-color ()
+  (interactive)
+  (recenter)
+  (unhighlight-regexp "^\+.*")
+  (highlight-regexp   "^\+.*" 'hi-green-b)
+  (unhighlight-regexp "^\-.*")
+  (highlight-regexp   "^\-.*" 'hi-red-b))
+
 (add-hook 'eshell-mode-hook
   (lambda ()
    (setq whitespace-style '(face trailing tabs tab-mark))
    (linum-mode 0)
    ;;(define-key eshell-mode-map (kbd "C-p") 'eshell-previous-matching-input-from-input)
    ;;(define-key eshell-mode-map (kbd "C-n") 'eshell-next-matching-input-from-input)
+   (define-key eshell-mode-map (kbd "C-l") 'recenter-with-highlight-diff-color)
    (define-key eshell-mode-map (kbd "C-r") 'helm-eshell-history)))
 
 ;; ----------------------------------------------------------------------------
