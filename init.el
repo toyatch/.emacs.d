@@ -19,8 +19,6 @@
 (prefer-coding-system 'utf-8)         ;; 文字コード設定
 (setq ring-bell-function 'ignore)     ;; beep抑止
 (setq make-backup-files nil)          ;; backupfile抑止
-(tool-bar-mode 0)                     ;; ツールバー非表示
-(scroll-bar-mode 0)                   ;; スクロールバー非表示
 
 ;; whitespace
 (setq whitespace-style '(face trailing tabs tab-mark))
@@ -198,8 +196,19 @@
   (lambda () (add-hook 'after-save-hook 'apply-prettier t t)))
 
 ;; ----------------------------------------------------------------------------
-;; others
+;; for WindowSystem
 ;; ----------------------------------------------------------------------------
-(setq x-select-enable-clipboard t)
+(if window-system (progn
+  (tool-bar-mode 0)                     ;; ツールバー非表示
+  (scroll-bar-mode 0)                   ;; スクロールバー非表示
+
+  ;; Colors
+  (set-background-color "Black")
+  (set-foreground-color "LightGray")
+  (set-cursor-color "Gray")
+  (set-frame-parameter nil 'alpha 85)
+
+  ;;; ClipBorard
+  (setq x-select-enable-clipboard t)))
 
 ;; EOF
