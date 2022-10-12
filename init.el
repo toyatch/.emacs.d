@@ -1,3 +1,4 @@
+(cd "~/")
 (customize-set-variable
  'package-archives '(("org"   . "https://orgmode.org/elpa/")
                      ("melpa" . "https://melpa.org/packages/")
@@ -43,6 +44,10 @@
 (define-key global-map (kbd "M-n")     'next-line)
 
 (define-key global-map (kbd "M-q")     'other-window)
+(define-key global-map (kbd "C-x p")   'windmove-up)
+(define-key global-map (kbd "C-x n")   'windmove-down)
+(define-key global-map (kbd "C-x f")   'windmove-right)
+(define-key global-map (kbd "C-x b")   'windmove-left)
 
 (define-key global-map (kbd "C-u") 'backward-kill-word)      ; like bash
 (define-key global-map (kbd "C-k") 'kill-line)               ; like bash & default
@@ -178,6 +183,7 @@
 ;; ----------------------------------------------------------------------------
 ;; tide & lsp(eslint)
 (find-or-install-package 'tide)
+(find-or-install-package 'company)
 (add-to-list 'auto-mode-alist '("\\/.*\\.ts\\'" . typescript-mode))
 (add-to-list 'auto-mode-alist '("\\/.*\\.tsx\\'" . typescript-mode))
 
@@ -190,9 +196,14 @@
     (tide-setup)
     (lsp t)
     (flycheck-mode t)
+    (company-mode t)
+    (auto-complete-mode t)
     (setq flycheck-check-syntax-automatically '(save mode-enabled))
     (add-node-modules-path)
     ))
+(define-key global-map (kbd "C-x C-n") 'next-error)
+(define-key global-map (kbd "C-x C-p") 'previous-error)
+(define-key global-map (kbd "C-x C-e") 'flycheck-list-errors)
 
 ;; preteer
 (find-or-install-package 'add-node-modules-path)
