@@ -48,6 +48,7 @@
 (define-key global-map (kbd "C-x n")   'windmove-down)
 (define-key global-map (kbd "C-x f")   'windmove-right)
 (define-key global-map (kbd "C-x b")   'windmove-left)
+(define-key global-map (kbd "C-^")     'enlarge-window)
 
 (define-key global-map (kbd "C-u") 'backward-kill-word)      ; like bash
 (define-key global-map (kbd "C-k") 'kill-line)               ; like bash & default
