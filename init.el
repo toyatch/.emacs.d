@@ -204,6 +204,8 @@
 (define-key global-map (kbd "C-x C-n") 'next-error)
 (define-key global-map (kbd "C-x C-p") 'previous-error)
 (define-key global-map (kbd "C-x C-e") 'flycheck-list-errors)
+(define-key global-map (kbd "C-x C-j") 'tide-jump-to-definition)
+(define-key global-map (kbd "C-x C-h") 'tide-jump-back)
 
 ;; preteer
 (find-or-install-package 'add-node-modules-path)
