@@ -210,7 +210,7 @@
     (lsp t)
     (flycheck-mode t)
     (company-mode t)
-    (auto-complete-mode t)
+    (auto-complete-mode nil)
     (setq flycheck-check-syntax-automatically '(save mode-enabled))
     (add-node-modules-path)
     ))
