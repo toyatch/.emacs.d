@@ -55,6 +55,7 @@
 (define-key global-map (kbd "C-^")     'enlarge-window)
 
 (define-key global-map (kbd "C-u") 'backward-kill-word)      ; like bash
+(define-key global-map (kbd "M-h") 'backward-kill-word)      ; like bash & default
 (define-key global-map (kbd "C-k") 'kill-line)               ; like bash & default
 (define-key global-map (kbd "C-h") 'delete-backward-char)    ; like bash
 (define-key global-map (kbd "C-d") 'delete-char)             ; like bash & default
@@ -219,6 +220,8 @@
 (define-key global-map (kbd "C-x C-e") 'flycheck-list-errors)
 (define-key global-map (kbd "C-x C-j") 'tide-jump-to-definition)
 (define-key global-map (kbd "C-x C-h") 'tide-jump-back)
+(define-key global-map (kbd "C-x C-i") 'company-indent-or-complete-common)
+(define-key global-map (kbd "C-x C-r") 'tide-references)
 
 ;; preteer
 (find-or-install-package 'add-node-modules-path)
