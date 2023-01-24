@@ -253,8 +253,8 @@
 
 (setq my-next-alpha 15)
 (defun set-alpha-toggle () (interactive)
-       (set-frame-parameter nil 'alpha my-next-alpha)
-       (setq my-next-alpha (- 100 my-next-alpha))
+       (set-frame-parameter nil 'alpha (+ 30 my-next-alpha))
+       (setq my-next-alpha (- 70 my-next-alpha))
        )
 (define-key global-map (kbd "C-<return>") 'set-alpha-toggle)
 
