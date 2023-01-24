@@ -48,6 +48,7 @@
 (define-key global-map (kbd "M-n")     'next-line)
 
 (define-key global-map (kbd "M-q")     'other-window)
+(define-key global-map (kbd "C-<tab>") 'other-window)
 (define-key global-map (kbd "C-x p")   'windmove-up)
 (define-key global-map (kbd "C-x n")   'windmove-down)
 (define-key global-map (kbd "C-x f")   'windmove-right)
@@ -249,5 +250,12 @@
 
   ;;; ClipBorard
   (setq x-select-enable-clipboard t)))
+
+(setq my-next-alpha 15)
+(defun set-alpha-toggle () (interactive)
+       (set-frame-parameter nil 'alpha my-next-alpha)
+       (setq my-next-alpha (- 100 my-next-alpha))
+       )
+(define-key global-map (kbd "C-<return>") 'set-alpha-toggle)
 
 ;; EOF
