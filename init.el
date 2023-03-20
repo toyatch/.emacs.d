@@ -1,9 +1,24 @@
 (cd "~/")
+
+;; Packageの初期化
+(require 'package)
 (customize-set-variable
  'package-archives '(("org"   . "https://orgmode.org/elpa/")
                      ("melpa" . "https://melpa.org/packages/")
                      ("gnu"   . "https://elpa.gnu.org/packages/")))
 (package-initialize)
+
+;; パッケージがインストールされていなければ自動インストール
+(unless package-archive-contents
+  (package-refresh-contents))
+
+(dolist (package '(use-package))
+  (unless (package-installed-p package)
+    (package-install package)))
+
+;; use-packageの初期化
+(eval-when-compile
+  (require 'use-package))
 
 (defun find-or-install-package (x)
   (unless (package-installed-p x)
@@ -75,6 +90,12 @@
 (define-key global-map (kbd "C-x l") 'linum-mode)
 (define-key global-map (kbd "C-t")   'untabify)
 (define-key global-map (kbd "C-x C-g") 'goto-line)
+
+;; ----------------------------------------------------------------------------
+;; flycheck
+;; ----------------------------------------------------------------------------
+(use-package flycheck
+  :ensure t)
 
 ;; ----------------------------------------------------------------------------
 ;; dimmer
@@ -162,12 +183,10 @@
 (setq ac-use-menu-map t)
 (setq ac-use-fuzzy t)
 
-(define-key global-map (kbd "C-x a") 'auto-complete-mode)
-
 ;; ----------------------------------------------------------------------------
-;; lsp-mode
+;; lsp(eglog)
 ;; ----------------------------------------------------------------------------
-(find-or-install-package 'lsp-mode)
+(use-package eglot)
 
 ;; ----------------------------------------------------------------------------
 ;; eshell-mode
@@ -196,33 +215,41 @@
 ;; ----------------------------------------------------------------------------
 ;; TypeScripts
 ;; ----------------------------------------------------------------------------
-;; tide & lsp(eslint)
-(find-or-install-package 'tide)
-(find-or-install-package 'company)
-(add-to-list 'auto-mode-alist '("\\/.*\\.ts\\'" . typescript-mode))
-(add-to-list 'auto-mode-alist '("\\/.*\\.tsx\\'" . typescript-mode))
+(use-package typescript-mode
+  :ensure t
+  :mode
+  ("\\.ts\\'" . typescript-mode)
+  ("\\.tsx\\'" . typescript-mode)
 
-(add-hook 'typescript-mode-hook
-  (lambda ()
-    (setq indent-tabs-mode nil)
-    (setq typescript-indent-level 2) ;; default 4
-    (setq js2-strict-missing-semi-warning nil)
-    (setq whitespace-style '(face trailing tabs tab-mark))
-    (tide-setup)
-    (lsp t)
-    (flycheck-mode t)
-    (company-mode t)
-    (auto-complete-mode nil)
-    (setq flycheck-check-syntax-automatically '(save mode-enabled))
-    (add-node-modules-path)
-    ))
-(define-key global-map (kbd "C-x C-n") 'next-error)
-(define-key global-map (kbd "C-x C-p") 'previous-error)
-(define-key global-map (kbd "C-x C-e") 'flycheck-list-errors)
-(define-key global-map (kbd "C-x C-j") 'tide-jump-to-definition)
-(define-key global-map (kbd "C-x C-h") 'tide-jump-back)
-(define-key global-map (kbd "C-x C-i") 'company-indent-or-complete-common)
-(define-key global-map (kbd "C-x C-r") 'tide-references)
+  :hook
+  ; LSPはeglot
+  (typescript-mode . eglot-ensure)
+  ; flycheckでeslintを利用する
+  (typescript-mode . add-node-modules-path)
+  (typescript-mode . flycheck-mode)
+
+  :config
+  (auto-complete-mode nil)
+  (setq typescript-indent-level 2)
+
+  :bind
+  ("C-x C-p" . flymake-goto-prev-error)
+  ("C-x C-n" . flymake-goto-next-error)
+  ("C-x C-e" . flymake-show-project-diagnostics)
+  ("C-x e"   . flycheck-list-errors)
+
+  ("C-x C-j" . xref-find-definitions)
+  ("C-x C-h" . xref-go-back)
+  ("C-x C-r" . xref-find-references)
+  )
+
+;; Company用の設定
+(use-package company
+  :ensure t
+  :config
+  (setq company-idle-delay 0.2)
+  (setq company-minimum-prefix-length 2)
+  (global-company-mode))
 
 ;; preteer
 (find-or-install-package 'add-node-modules-path)
