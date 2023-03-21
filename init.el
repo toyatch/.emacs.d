@@ -25,9 +25,9 @@
     (package-refresh-contents)
     (package-install x)))
 
-;;-----------------------------------------------------------------------------
+;;-------------------------------------------------------------------------
 ;; basic
-;;-----------------------------------------------------------------------------
+;;-------------------------------------------------------------------------
 (load-theme 'wheatgrass)              ;; theme
 (setq inhibit-startup-screen t)       ;; スタートアップメッセージ非表示
 (menu-bar-mode 0)                     ;; メニューバー非表示
@@ -51,9 +51,9 @@
 ;; 環境変数
 (setenv "LANG" "ja_JP.UTF-8")
 
-;;-----------------------------------------------------------------------------
+;;-------------------------------------------------------------------------
 ;; basic-keybind
-;;-----------------------------------------------------------------------------
+;;-------------------------------------------------------------------------
 (define-key global-map (kbd "C-z")     'undo)
 (define-key global-map (kbd "C-x C-z") 'undo)
 
@@ -81,75 +81,82 @@
 (define-key global-map (kbd "C-w") 'kill-region)             ; original
 (define-key global-map (kbd "M-w") 'kill-ring-save)          ; original
 (define-key global-map (kbd "C-y") 'yank)                    ; original
+(define-key global-map (kbd "M-y") 'yank-pop)                ; original
 
 (define-key global-map (kbd "C-o") 'mark-sexp)
 (define-key global-map (kbd "M-o") 'mark-sexp)
 (define-key global-map (kbd "C-q") 'toggle-truncate-lines)
-(define-key global-map (kbd "M-g") 'grep-find)
 
 (define-key global-map (kbd "C-x l") 'linum-mode)
 (define-key global-map (kbd "C-t")   'untabify)
 (define-key global-map (kbd "C-x C-g") 'goto-line)
 
-;; ----------------------------------------------------------------------------
+;; ------------------------------------------------------------------------
 ;; flycheck
-;; ----------------------------------------------------------------------------
+;; ------------------------------------------------------------------------
 (use-package flycheck
   :ensure t)
 
-;; ----------------------------------------------------------------------------
+;; ------------------------------------------------------------------------
 ;; dimmer
-;; ----------------------------------------------------------------------------
+;; ------------------------------------------------------------------------
 (find-or-install-package 'dimmer)
 (setq dimmer-fraction 0.4)
 (setq dimmer-exclusion-regexp "^\\*helm\\|^ \\*Minibuf")
 (dimmer-activate)
 
-;;-----------------------------------------------------------------------------
-;; helm
-;;-----------------------------------------------------------------------------
-(find-or-install-package 'helm)
-(require 'helm-config)
+;;-------------------------------------------------------------------------
+;; 補完検索
+;;-------------------------------------------------------------------------
+;; ファイル/バッファ/コマンド補完
+(find-or-install-package 'vertico)
+(use-package vertico
+  :init
+  (vertico-mode +1)
+  )
 
-;; settings
-(helm-mode 1)
-(setq helm-autoresize-max-height 0)
-(setq helm-autoresize-min-height 20)
+(use-package vertico-directory
+  :after vertico
+  :ensure nil
+  :bind
+  (:map vertico-map
+        ("C-l" . vertico-directory-delete-word))
+  :hook
+  (rfn-eshadow-setup-minibuffer . vertico-directory-tidy)
+  )
 
-;; keymap
-(define-key helm-map            (kbd "C-h")     'delete-backward-char)
-(define-key helm-find-files-map (kbd "C-h")     'delete-backward-char)
-(define-key helm-read-file-map  (kbd "C-h")     'delete-backward-char)
-(define-key helm-map            (kbd "TAB")     'helm-execute-persistent-action)
-(define-key helm-find-files-map (kbd "TAB")     'helm-execute-persistent-action)
-(define-key helm-read-file-map  (kbd "TAB")     'helm-execute-persistent-action)
-(define-key helm-map            (kbd "C-b")     (kbd "C-l"))
-(define-key helm-find-files-map (kbd "C-b")     (kbd "C-l"))
-(define-key helm-read-file-map  (kbd "C-b")     (kbd "C-l"))
-(define-key helm-map            (kbd "C-f")     (kbd "TAB"))
-(define-key helm-find-files-map (kbd "C-f")     (kbd "TAB"))
-(define-key helm-read-file-map  (kbd "C-f")     (kbd "TAB"))
-(define-key helm-map            (kbd "C-z")     (kbd "C-g"))
-(define-key helm-find-files-map (kbd "C-z")     (kbd "C-g"))
-(define-key helm-read-file-map  (kbd "C-z")     (kbd "C-g"))
-(define-key global-map          (kbd "C-x C-f") 'helm-find-files)
-(define-key global-map          (kbd "C-x C-b") 'helm-mini)
-(define-key global-map          (kbd "M-x")     'helm-M-x)
-(define-key global-map          (kbd "M-y")     'helm-show-kill-ring) ; overrige yank-pop
+;; 補完を中間一致で行う
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-defaults '((file (styles basic partial-completion)))
+))
 
-;;-----------------------------------------------------------------------------
-;; swiper
-;; ----------------------------------------------------------------------------
-(find-or-install-package 'swiper)
-(require 'swiper)
+;; ミニバッファ詳細化
+(find-or-install-package 'marginalia)
+(use-package marginalia
+  :bind (("M-A" . marginalia-cycle)
+         :map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
+  :init
+  (marginalia-mode))
 
-(define-key global-map          (kbd "C-s")     'swiper-thing-at-point)
-(define-key global-map          (kbd "M-s")     'swiper)
-(define-key global-map          (kbd "C-M-s")   'swiper-all-thing-at-point)
+;; 検索系
+(find-or-install-package 'consult)
+(require 'consult)
+(define-key global-map (kbd "C-x C-b") 'consult-buffer)
+(define-key global-map (kbd "M-g") 'consult-grep)
+(define-key global-map (kbd "C-s") 'consult-line)
+(define-key global-map (kbd "M-s") 'consult-line)
+(define-key global-map (kbd "C-M-s") 'consult-line-multi)
 
-;; ----------------------------------------------------------------------------
+;; minibuffer内でyank-popする場合はバッファの関係？でhelmでしかうまくいかない
+(define-key global-map (kbd "C-M-y") 'helm-show-kill-ring)
+
+;; ------------------------------------------------------------------------
 ;; undo-tree
-;; ----------------------------------------------------------------------------
+;; ------------------------------------------------------------------------
 (find-or-install-package 'undo-tree)
 (require 'undo-tree)
 
@@ -183,14 +190,15 @@
 (setq ac-use-menu-map t)
 (setq ac-use-fuzzy t)
 
-;; ----------------------------------------------------------------------------
+;; ------------------------------------------------------------------------
 ;; lsp(eglog)
-;; ----------------------------------------------------------------------------
+;; ------------------------------------------------------------------------
+(find-or-install-package 'eglot)
 (use-package eglot)
 
-;; ----------------------------------------------------------------------------
+;; ------------------------------------------------------------------------
 ;; eshell-mode
-;; ----------------------------------------------------------------------------
+;; ------------------------------------------------------------------------
 ;; FIXME: CTRL ALTの入れ替えをしたい
 ;; TODO: eshellのgit diffで色分けをしたい
 (define-key global-map (kbd "M-t") 'eshell)
@@ -210,11 +218,11 @@
    ;;(define-key eshell-mode-map (kbd "C-p") 'eshell-previous-matching-input-from-input)
    ;;(define-key eshell-mode-map (kbd "C-n") 'eshell-next-matching-input-from-input)
    (define-key eshell-mode-map (kbd "C-l") 'recenter-with-highlight-diff-color)
-   (define-key eshell-mode-map (kbd "C-r") 'helm-eshell-history)))
+   (define-key eshell-mode-map (kbd "C-r") 'consult-history)))
 
-;; ----------------------------------------------------------------------------
+;; ------------------------------------------------------------------------
 ;; TypeScripts
-;; ----------------------------------------------------------------------------
+;; ------------------------------------------------------------------------
 (use-package typescript-mode
   :ensure t
   :mode
@@ -262,9 +270,9 @@
 (add-hook 'typescript-mode-hook
   (lambda () (add-hook 'after-save-hook 'apply-prettier t t)))
 
-;; ----------------------------------------------------------------------------
+;; ------------------------------------------------------------------------
 ;; for WindowSystem
-;; ----------------------------------------------------------------------------
+;; ------------------------------------------------------------------------
 (if window-system (progn
   (tool-bar-mode 0)                     ;; ツールバー非表示
   (scroll-bar-mode 0)                   ;; スクロールバー非表示
