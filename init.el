@@ -91,25 +91,17 @@
 (define-key global-map (kbd "C-t")   'untabify)
 (define-key global-map (kbd "C-x C-g") 'goto-line)
 
-;; ------------------------------------------------------------------------
-;; flycheck
-;; ------------------------------------------------------------------------
-(use-package flycheck
-  :ensure t)
-
-;; ------------------------------------------------------------------------
-;; dimmer
-;; ------------------------------------------------------------------------
 (find-or-install-package 'dimmer)
-
-(setq dimmer-fraction 0.4)
-(setq dimmer-exclusion-regexp "^\\*helm\\|^ \\*Minibuf")
-(dimmer-activate)
+(use-package dimmer
+  :config
+  (setq dimmer-fraction 0.4)
+  (setq dimmer-exclusion-regexp "^\\*helm\\|^ \\*Minibuf")
+  (dimmer-activate))
 
 ;;-------------------------------------------------------------------------
-;; 補完検索
+;; 入力補完
 ;;-------------------------------------------------------------------------
-;; ファイル/バッファ/コマンド補完
+;; 候補表示と絞り込み
 (find-or-install-package 'vertico)
 (use-package vertico
   :init
@@ -124,7 +116,7 @@
   :hook
   (rfn-eshadow-setup-minibuffer . vertico-directory-tidy))
 
-;; 補完を中間一致で行う
+;; verticoと連携し候補表示を中間一致で行う
 (use-package orderless
   :ensure t
   :custom
@@ -140,7 +132,7 @@
   :init
   (marginalia-mode))
 
-;; 検索系
+;; バッファ、検索機能など
 (find-or-install-package 'consult)
 (use-package consult
   :bind
@@ -151,6 +143,14 @@
         ("C-M-s" . consult-line-multi)
         ("C-x C-b" . consult-buffer)))
 
+;; オートコンプリート
+(use-package company
+  :ensure t
+  :config
+  (setq company-idle-delay 0.2)
+  (setq company-minimum-prefix-length 2)
+  (global-company-mode))
+
 ;; minibuffer内でyank-popする場合はバッファの関係？でhelmでしかうまくいかない
 (define-key global-map (kbd "C-M-y") 'helm-show-kill-ring)
 
@@ -158,43 +158,87 @@
 ;; undo-tree
 ;; ------------------------------------------------------------------------
 (find-or-install-package 'undo-tree)
-(require 'undo-tree)
+(use-package undo-tree
+  :init
+  (defun undo-tree-visualize-start ()
+    (interactive)
+    (setq-default truncate-lines t)
+    (undo-tree-visualize)
+    (undo-tree-visualize-undo))
+  (setq undo-tree-mode-lighter "")
+  (setq undo-tree-auto-save-history nil)
+  (global-undo-tree-mode 1)
 
-(setq undo-tree-mode-lighter "")
-(setq undo-tree-auto-save-history nil)
-(global-undo-tree-mode 1)
+  :bind
+  (:map global-map
+        ("C-z" . undo-tree-undo)
+        ("C-X C-z" . undo-tree-visualize-start))
+  (:map undo-tree-visualizer-mode-map
+        ("C-z" . undo-tree-visualize-undo)
+        ("C-y" . undo-tree-visualize-redo)
+        ("C-g" . undo-tree-visualizer-quit)
+        ("C-j" . undo-tree-visualizer-quit)
+        ("C-m" . undo-tree-visualizer-quit)
+        ("g"   . undo-tree-visualizer-quit)
+        ("j"   . undo-tree-visualizer-quit)
+        ("m"   . undo-tree-visualizer-quit)))
 
-(defun undo-tree-visualize-start ()
-  (interactive)
-  (setq-default truncate-lines t)
-  (undo-tree-visualize)
-  (undo-tree-visualize-undo))
-
-(define-key global-map                    (kbd "C-z")     'undo-tree-undo)
-(define-key global-map                    (kbd "C-x C-z") 'undo-tree-visualize-start)
-(define-key undo-tree-visualizer-mode-map (kbd "C-z")     'undo-tree-visualize-undo)
-(define-key undo-tree-visualizer-mode-map (kbd "C-y")     'undo-tree-visualize-redo)
-(define-key undo-tree-visualizer-mode-map (kbd "C-g")     'undo-tree-visualizer-quit)
-(define-key undo-tree-visualizer-mode-map (kbd "C-j")     'undo-tree-visualizer-quit)
-(define-key undo-tree-visualizer-mode-map (kbd "C-m")     'undo-tree-visualizer-quit)
-(define-key undo-tree-visualizer-mode-map (kbd "g")       'undo-tree-visualizer-quit)
-(define-key undo-tree-visualizer-mode-map (kbd "j")       'undo-tree-visualizer-quit)
-(define-key undo-tree-visualizer-mode-map (kbd "m")       'undo-tree-visualizer-quit)
-
-;; ----------------------------------------------------------------------------
-;; auto-complete
-;; ----------------------------------------------------------------------------
-(find-or-install-package 'auto-complete)
-(require 'auto-complete-config)
-(ac-config-default)
-(setq ac-use-menu-map t)
-(setq ac-use-fuzzy t)
+;; ------------------------------------------------------------------------
+;; flycheck
+;; ------------------------------------------------------------------------
+(use-package flycheck
+  :ensure t)
 
 ;; ------------------------------------------------------------------------
 ;; lsp(eglog)
 ;; ------------------------------------------------------------------------
 (find-or-install-package 'eglot)
 (use-package eglot)
+
+;; ------------------------------------------------------------------------
+;; TypeScripts
+;; ------------------------------------------------------------------------
+(find-or-install-package 'add-node-modules-path)
+(use-package typescript-mode
+  :ensure t
+  :mode
+  ("\\.ts\\'" . typescript-mode)
+  ("\\.tsx\\'" . typescript-mode)
+
+  :hook
+  ; LSPはeglot
+  (typescript-mode . eglot-ensure)
+  ; flycheckでeslintを利用する
+  (typescript-mode . add-node-modules-path)
+  (typescript-mode . flycheck-mode)
+  (typescript-mode . hs-minor-mode)
+
+  :config
+  (auto-complete-mode nil)
+  (setq typescript-indent-level 2)
+
+  (defun apply-prettier ()
+    (interactive)
+    (shell-command
+     (format "%s --write %s"
+             (shell-quote-argument (executable-find "prettier"))
+             (shell-quote-argument (expand-file-name buffer-file-name))))
+    (revert-buffer t t t))
+  (add-hook 'typescript-mode-hook
+            (lambda () (add-hook 'after-save-hook 'apply-prettier t t)))
+
+  :bind
+  ("C-x C-p" . flymake-goto-prev-error)
+  ("C-x C-n" . flymake-goto-next-error)
+  ("C-x C-e" . flymake-show-project-diagnostics)
+  ("C-x e"   . flycheck-list-errors)
+
+  ("C-x C-j" . xref-find-definitions)
+  ("C-x C-h" . xref-go-back)
+  ("C-x C-r" . xref-find-references)
+
+  ("M-[" . hs-hide-block)
+  ("M-]" . hs-show-block))
 
 ;; ------------------------------------------------------------------------
 ;; eshell-mode
@@ -219,61 +263,6 @@
    ;;(define-key eshell-mode-map (kbd "C-n") 'eshell-next-matching-input-from-input)
    (define-key eshell-mode-map (kbd "C-l") 'recenter-with-highlight-diff-color)
    (define-key eshell-mode-map (kbd "C-r") 'consult-history)))
-
-;; ------------------------------------------------------------------------
-;; TypeScripts
-;; ------------------------------------------------------------------------
-(use-package typescript-mode
-  :ensure t
-  :mode
-  ("\\.ts\\'" . typescript-mode)
-  ("\\.tsx\\'" . typescript-mode)
-
-  :hook
-  ; LSPはeglot
-  (typescript-mode . eglot-ensure)
-  ; flycheckでeslintを利用する
-  (typescript-mode . add-node-modules-path)
-  (typescript-mode . flycheck-mode)
-
-  :config
-  (auto-complete-mode nil)
-  (setq typescript-indent-level 2)
-
-  :bind
-  ("C-x C-p" . flymake-goto-prev-error)
-  ("C-x C-n" . flymake-goto-next-error)
-  ("C-x C-e" . flymake-show-project-diagnostics)
-  ("C-x e"   . flycheck-list-errors)
-
-  ("C-x C-j" . xref-find-definitions)
-  ("C-x C-h" . xref-go-back)
-  ("C-x C-r" . xref-find-references)
-
-  ("M-[" . hs-hide-block)
-  ("M-]" . hs-show-block)
-
-  :hook
-  (typescript-mode . hs-minor-mode))
-
-;; Company用の設定
-(use-package company
-  :ensure t
-  :config
-  (setq company-idle-delay 0.2)
-  (setq company-minimum-prefix-length 2)
-  (global-company-mode))
-
-;; preteer
-(find-or-install-package 'add-node-modules-path)
-(defun apply-prettier ()
-  (interactive)
-  (shell-command (format "%s --write %s"
-    (shell-quote-argument (executable-find "prettier"))
-    (shell-quote-argument (expand-file-name buffer-file-name))))
-  (revert-buffer t t t))
-(add-hook 'typescript-mode-hook
-  (lambda () (add-hook 'after-save-hook 'apply-prettier t t)))
 
 ;; ------------------------------------------------------------------------
 ;; for WindowSystem
