@@ -214,7 +214,6 @@
   (typescript-mode . hs-minor-mode)
 
   :config
-  (auto-complete-mode nil)
   (setq typescript-indent-level 2)
 
   (defun apply-prettier ()
