@@ -57,8 +57,6 @@
 (define-key global-map (kbd "C-z")     'undo)
 (define-key global-map (kbd "C-x C-z") 'undo)
 
-(define-key global-map (kbd "C-x C-a") 'mark-page)
-
 (define-key global-map (kbd "M-p")     'previous-line)
 (define-key global-map (kbd "M-n")     'next-line)
 
@@ -142,6 +140,11 @@
         ("M-s" . consult-line)
         ("C-M-s" . consult-line-multi)
         ("C-x C-b" . consult-buffer)))
+(find-or-install-package 'embark-consult)
+(use-package embark-consult
+  :bind
+  (:map global-map
+        ("C-x C-a" . embark-act)))
 
 ;; オートコンプリート
 (use-package company
