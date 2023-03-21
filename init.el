@@ -249,7 +249,12 @@
   ("C-x C-j" . xref-find-definitions)
   ("C-x C-h" . xref-go-back)
   ("C-x C-r" . xref-find-references)
-  )
+
+  ("M-[" . hs-hide-block)
+  ("M-]" . hs-show-block)
+
+  :hook
+  (typescript-mode . hs-minor-mode))
 
 ;; Company用の設定
 (use-package company
