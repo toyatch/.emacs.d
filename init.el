@@ -101,6 +101,7 @@
 ;; dimmer
 ;; ------------------------------------------------------------------------
 (find-or-install-package 'dimmer)
+
 (setq dimmer-fraction 0.4)
 (setq dimmer-exclusion-regexp "^\\*helm\\|^ \\*Minibuf")
 (dimmer-activate)
@@ -112,8 +113,7 @@
 (find-or-install-package 'vertico)
 (use-package vertico
   :init
-  (vertico-mode +1)
-  )
+  (vertico-mode +1))
 
 (use-package vertico-directory
   :after vertico
@@ -122,16 +122,14 @@
   (:map vertico-map
         ("C-l" . vertico-directory-delete-word))
   :hook
-  (rfn-eshadow-setup-minibuffer . vertico-directory-tidy)
-  )
+  (rfn-eshadow-setup-minibuffer . vertico-directory-tidy))
 
 ;; 補完を中間一致で行う
 (use-package orderless
   :ensure t
   :custom
   (completion-styles '(orderless basic))
-  (completion-category-defaults '((file (styles basic partial-completion)))
-))
+  (completion-category-defaults '((file (styles basic partial-completion)))))
 
 ;; ミニバッファ詳細化
 (find-or-install-package 'marginalia)
@@ -144,12 +142,14 @@
 
 ;; 検索系
 (find-or-install-package 'consult)
-(require 'consult)
-(define-key global-map (kbd "C-x C-b") 'consult-buffer)
-(define-key global-map (kbd "M-g") 'consult-grep)
-(define-key global-map (kbd "C-s") 'consult-line)
-(define-key global-map (kbd "M-s") 'consult-line)
-(define-key global-map (kbd "C-M-s") 'consult-line-multi)
+(use-package consult
+  :bind
+  (:map global-map
+        ("M-g" . consult-grep)
+        ("C-s" . consult-line)
+        ("M-s" . consult-line)
+        ("C-M-s" . consult-line-multi)
+        ("C-x C-b" . consult-buffer)))
 
 ;; minibuffer内でyank-popする場合はバッファの関係？でhelmでしかうまくいかない
 (define-key global-map (kbd "C-M-y") 'helm-show-kill-ring)
