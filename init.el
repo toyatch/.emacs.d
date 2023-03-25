@@ -224,6 +224,7 @@
 
   :config
   (setq typescript-indent-level 2)
+  (setq flycheck-idle-change-delay 5)
 
   (defun apply-prettier ()
     (interactive)
@@ -234,6 +235,7 @@
     (revert-buffer t t t))
   (add-hook 'typescript-mode-hook
             (lambda () (add-hook 'after-save-hook 'apply-prettier t t)))
+
 
   :bind
   ("C-x C-p" . flymake-goto-prev-error)
