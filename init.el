@@ -74,6 +74,7 @@
 (define-key global-map (kbd "C-h") 'delete-backward-char)    ; like bash
 (define-key global-map (kbd "C-d") 'delete-char)             ; like bash & default
 (define-key global-map (kbd "C-r") 'isearch-backward)        ; like bash & default
+(define-key global-map (kbd "M-g") 'occur)                   ; like bash
 (define-key global-map (kbd "C-l") 'recenter)                ; like bash
 
 (define-key global-map (kbd "C-w") 'kill-region)             ; original
@@ -133,11 +134,16 @@
 ;; バッファ、検索機能など
 (find-or-install-package 'consult)
 (use-package consult
+  :config
+  (defun consult-line-thing-at-point ()
+    (interactive)
+    (let ((thing (thing-at-point 'symbol)))
+    (consult-line (or thing ""))))
   :bind
   (:map global-map
-        ("M-g" . consult-grep)
-        ("C-s" . consult-line)
+        ("C-s" . consult-line-thing-at-point)
         ("M-s" . consult-line)
+        ("C-M-g" . consult-grep)
         ("C-M-s" . consult-line-multi)
         ("C-x C-b" . consult-buffer)))
 (find-or-install-package 'embark-consult)
