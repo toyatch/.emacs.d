@@ -111,7 +111,8 @@
   :ensure nil
   :bind
   (:map vertico-map
-        ("C-l" . vertico-directory-delete-word))
+        ("C-l" . vertico-directory-delete-word)
+        ("C-m" . vertico-directory-enter))
   :hook
   (rfn-eshadow-setup-minibuffer . vertico-directory-tidy))
 
