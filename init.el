@@ -80,7 +80,6 @@
 (define-key global-map (kbd "C-w") 'kill-region)             ; original
 (define-key global-map (kbd "M-w") 'kill-ring-save)          ; original
 (define-key global-map (kbd "C-y") 'yank)                    ; original
-(define-key global-map (kbd "M-y") 'yank-pop)                ; original
 
 (define-key global-map (kbd "C-o") 'mark-sexp)
 (define-key global-map (kbd "M-o") 'mark-sexp)
@@ -88,7 +87,6 @@
 
 (define-key global-map (kbd "C-x l") 'linum-mode)
 (define-key global-map (kbd "C-t")   'untabify)
-(define-key global-map (kbd "C-x C-g") 'goto-line)
 
 (find-or-install-package 'dimmer)
 (use-package dimmer
@@ -139,14 +137,19 @@
   (defun consult-line-thing-at-point ()
     (interactive)
     (let ((thing (thing-at-point 'symbol)))
-    (consult-line (or thing ""))))
+      (consult-line (or thing ""))))
   :bind
   (:map global-map
+        ("M-y" . consult-yank-pop)
         ("C-s" . consult-line-thing-at-point)
         ("M-s" . consult-line)
         ("C-M-g" . consult-grep)
         ("C-M-s" . consult-line-multi)
-        ("C-x C-b" . consult-buffer)))
+        ("C-x C-b" . consult-buffer)
+        ("C-x C-g" . consult-goto-line))
+  (:map minibuffer-local-map
+        ("M-y" . yank-pop)))
+
 (find-or-install-package 'embark-consult)
 (use-package embark-consult
   :bind
@@ -160,9 +163,6 @@
   (setq company-idle-delay 0.2)
   (setq company-minimum-prefix-length 2)
   (global-company-mode))
-
-;; minibuffer内でyank-popする場合はバッファの関係？でhelmでしかうまくいかない
-(define-key global-map (kbd "C-M-y") 'helm-show-kill-ring)
 
 ;; ------------------------------------------------------------------------
 ;; undo-tree
