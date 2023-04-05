@@ -162,7 +162,10 @@
   :config
   (setq company-idle-delay 0.2)
   (setq company-minimum-prefix-length 2)
-  (global-company-mode))
+  (setq company-begin-commands nil)
+  (global-company-mode)
+  :bind (("C-<return>" . company-complete))
+  )
 
 ;; ------------------------------------------------------------------------
 ;; undo-tree
@@ -296,6 +299,6 @@
        (set-frame-parameter nil 'alpha (+ 30 my-next-alpha))
        (setq my-next-alpha (- 70 my-next-alpha))
        )
-(define-key global-map (kbd "C-<return>") 'set-alpha-toggle)
+(define-key global-map (kbd "C-M-<return>") 'set-alpha-toggle)
 
 ;; EOF
