@@ -167,7 +167,6 @@
   :config
   (setq company-idle-delay 0.2)
   (setq company-minimum-prefix-length 2)
-  (setq company-begin-commands nil)
   (global-company-mode)
   :bind (("C-<return>" . company-complete))
   )
@@ -234,6 +233,7 @@
   :config
   (setq typescript-indent-level 2)
   (setq flycheck-idle-change-delay 5)
+  (setq-local company-backends '((company-capf)))
 
   (defun apply-prettier ()
     (interactive)
