@@ -143,6 +143,8 @@
 
 (find-or-install-package 'consult)
 (use-package consult
+  :config
+  (setq consult-goto-line-numbers nil)
   :bind
   (:map global-map
         ("M-y" . consult-yank-pop)
