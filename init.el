@@ -131,18 +131,21 @@
   (marginalia-mode))
 
 ;; バッファ、検索機能など
+(find-or-install-package 'swiper)
+(use-package swiper
+  :config
+  :bind
+  (:map global-map
+        ("C-s" . swiper-thing-at-point)
+        ("M-s" . swiper))
+  (:map minibuffer-local-map
+        ("M-y" . yank-pop)))
+
 (find-or-install-package 'consult)
 (use-package consult
-  :config
-  (defun consult-line-thing-at-point ()
-    (interactive)
-    (let ((thing (thing-at-point 'symbol)))
-      (consult-line (or thing ""))))
   :bind
   (:map global-map
         ("M-y" . consult-yank-pop)
-        ("C-s" . consult-line-thing-at-point)
-        ("M-s" . consult-line)
         ("C-M-g" . consult-grep)
         ("C-M-s" . consult-line-multi)
         ("C-x C-b" . consult-buffer)
