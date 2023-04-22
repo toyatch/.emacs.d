@@ -31,9 +31,13 @@
 (load-theme 'wheatgrass)              ;; theme
 (setq inhibit-startup-screen t)       ;; スタートアップメッセージ非表示
 (menu-bar-mode 0)                     ;; メニューバー非表示
-(set-language-environment 'Japanese)  ;; 言語設定
-(prefer-coding-system 'utf-8)         ;; 文字コード設定
 (setq ring-bell-function 'ignore)     ;; beep抑止
+
+;; 文字コード設定
+(set-language-environment 'Japanese)  ;; 言語設定
+(set-language-environment "UTF-8")
+(setq default-process-coding-system '(utf-8 . utf-8))
+(prefer-coding-system 'utf-8)
 
 ;; backupfile抑止
 (setq make-backup-files nil)
@@ -269,28 +273,61 @@
   ("\\.csv\\'" . csv-mode))
 
 ;; ------------------------------------------------------------------------
-;; eshell-mode
+;; shell-mode
 ;; ------------------------------------------------------------------------
+;;
+;; .bashrcに以下を記載しておく
+;;
+;;   # for emacs
+;;   if [[ $TERM != "dumb" ]]; then
+;;     export PS1='\w $ '
+;;   fi
+;;
 ;; FIXME: CTRL ALTの入れ替えをしたい
 ;; TODO: eshellのgit diffで色分けをしたい
-(define-key global-map (kbd "M-t") 'eshell)
+;; NOTE: use-packageのhookではなぜかうまくいかない
+(add-hook 'shell-mode-hook
+  (lambda ()
+    (linum-mode 0)
+    (font-lock-mode 0)
+    (define-key shell-mode-map (kbd "C-l") 'my-git-diff-toggle)
+    (define-key shell-mode-map (kbd "C-r") 'consult-history)
+  ))
 
-(defun recenter-with-highlight-diff-color ()
+(use-package shell
+  :ensure nil
+  :config
+  (setq explicit-shell-file-name "C:/Program Files/Git/bin/bash.exe")
+  (setq shell-file-name "bash")
+  (setq explicit-bash.exe-args '("--noediting" "-i"))
+  :bind
+  ("M-t" . shell))
+
+(setq my-git-diff-toggle-status 0)
+
+(defun my-git-diff-on ()
+  (interactive)
+  (highlight-regexp   "^\+.*$" 'compilation-info)
+  (highlight-regexp   "^\-.*$" 'compilation-error)
+  (highlight-regexp   "^Changes to be committed:" 'compilation-info)
+  (highlight-regexp   "^Changes not staged for commit:" 'compilation-error)
+  (highlight-regexp   "^Untracked files:" 'compilation-error)
+  )
+
+(defun my-git-diff-off ()
+  (interactive)
+  (unhighlight-regexp "^\+.*$")
+  (unhighlight-regexp "^\-.*$")
+  (unhighlight-regexp "^Changes to be committed:")
+  (unhighlight-regexp "^Changes not staged for commit:")
+  (unhighlight-regexp "^Untracked files:")
+  )
+
+(defun my-git-diff-toggle ()
   (interactive)
   (recenter)
-  (unhighlight-regexp "^\+.*")
-  (highlight-regexp   "^\+.*" 'hi-green-b)
-  (unhighlight-regexp "^\-.*")
-  (highlight-regexp   "^\-.*" 'hi-red-b))
-
-(add-hook 'eshell-mode-hook
-  (lambda ()
-   (setq whitespace-style '(face trailing tabs tab-mark))
-   (linum-mode 0)
-   ;;(define-key eshell-mode-map (kbd "C-p") 'eshell-previous-matching-input-from-input)
-   ;;(define-key eshell-mode-map (kbd "C-n") 'eshell-next-matching-input-from-input)
-   (define-key eshell-mode-map (kbd "C-l") 'recenter-with-highlight-diff-color)
-   (define-key eshell-mode-map (kbd "C-r") 'consult-history)))
+  (if (eq my-git-diff-toggle-status 0) (my-git-diff-on) (my-git-diff-off))
+  (setq my-git-diff-toggle-status (- 1 my-git-diff-toggle-status)))
 
 ;; ------------------------------------------------------------------------
 ;; for WindowSystem
