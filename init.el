@@ -284,7 +284,8 @@
 ;;   fi
 ;;
 ;; FIXME: CTRL ALTの入れ替えをしたい
-;; TODO: eshellのgit diffで色分けをしたい
+;; TODO: shellのgit diffで色分けをしたい
+
 ;; NOTE: use-packageのhookではなぜかうまくいかない
 (add-hook 'shell-mode-hook
   (lambda ()
