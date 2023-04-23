@@ -1,3 +1,7 @@
+;; TODO
+;; for Windows
+;; [ ] 2023/04/23 windows上でGitBashを介さずに起動したとき、git fetchなどのSSH接続ができない問題を解消したい
+;; [ ] 2023/04/23 shell-modeでgit logしたときに結果が最後まで流れるのではなく１画面で止めたい(less)
 (cd "~/")
 
 ;; Packageの初期化
