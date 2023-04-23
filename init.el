@@ -140,8 +140,8 @@
   :config
   :bind
   (:map global-map
-        ("C-s" . swiper-thing-at-point)
-        ("M-s" . swiper))
+        ("M-s" . swiper-thing-at-point)
+        ("C-s" . swiper))
   (:map minibuffer-local-map
         ("M-y" . yank-pop)))
 
