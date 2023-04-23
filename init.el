@@ -372,4 +372,12 @@
        )
 (define-key global-map (kbd "C-M-<return>") 'set-alpha-toggle)
 
+;; ------------------------------------------------------------------------
+;; experimental
+;; ------------------------------------------------------------------------
+;; 実験的機能
+;; 別リポジトリで管理。使わない場合は空のexperimental.elを配置しておく
+(add-to-list 'load-path "~/.emacs.d/.emacs.d-experimental")
+(load "experimental.el")
+
 ;; EOF
