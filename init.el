@@ -82,7 +82,7 @@
 (define-key global-map (kbd "C-h") 'delete-backward-char)    ; like bash
 (define-key global-map (kbd "C-d") 'delete-char)             ; like bash & default
 (define-key global-map (kbd "C-r") 'isearch-backward)        ; like bash & default
-(define-key global-map (kbd "M-g") 'occur)                   ; like bash
+(define-key global-map (kbd "M-g") 'grep-find)               ; like bash
 (define-key global-map (kbd "C-l") 'recenter)                ; like bash
 
 (define-key global-map (kbd "C-w") 'kill-region)             ; original
