@@ -95,6 +95,7 @@
 
 (define-key global-map (kbd "C-x l") 'linum-mode)
 (define-key global-map (kbd "C-t")   'untabify)
+(define-key global-map (kbd "C-c C-g") 'magit)
 
 (find-or-install-package 'dimmer)
 (use-package dimmer
