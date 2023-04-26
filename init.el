@@ -257,7 +257,8 @@
 
   :config
   (setq typescript-indent-level 2)
-  (setq flycheck-idle-change-delay 5)
+  ;; flycheckが自動で実行されるのを抑制
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (setq-local company-backends '((company-capf)))
 
   (defun apply-prettier ()
@@ -275,6 +276,7 @@
   ("C-x C-p" . flymake-goto-prev-error)
   ("C-x C-n" . flymake-goto-next-error)
   ("C-x C-e" . flymake-show-project-diagnostics)
+  ("C-c C-f C-c" . flycheck-buffer)
   ("C-x e"   . flycheck-list-errors)
 
   ("C-x C-j" . xref-find-definitions)
