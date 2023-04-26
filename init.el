@@ -234,7 +234,12 @@
 ;; lsp(eglog)
 ;; ------------------------------------------------------------------------
 (find-or-install-package 'eglot)
-(use-package eglot)
+(use-package eglot
+  :init
+  ;; フォーカスが当たると太字になるのが画面のちらつきになって邪魔なのでOFF
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-ignored-server-capabilites :documentHighlightProvider))
+  )
 
 ;; ------------------------------------------------------------------------
 ;; TypeScripts
