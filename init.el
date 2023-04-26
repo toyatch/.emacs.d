@@ -188,10 +188,10 @@
 ;; オートコンプリート
 (use-package company
   :ensure t
+  :diminish company-mode
   :config
   (setq company-idle-delay 0.2)
   (setq company-minimum-prefix-length 2)
-  (global-company-mode)
   :bind (("C-<return>" . company-complete))
   )
 
@@ -253,6 +253,7 @@
   (typescript-mode . add-node-modules-path)
   (typescript-mode . flycheck-mode)
   (typescript-mode . hs-minor-mode)
+  (typescript-mode . company-mode)
 
   :config
   (setq typescript-indent-level 2)
