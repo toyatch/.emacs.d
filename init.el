@@ -111,11 +111,12 @@
 (define-key global-map (kbd "C-t")   'untabify)
 (define-key global-map (kbd "C-c C-g") 'magit)
 
+;; ウィンドウがアクティブでないときに、背景を暗くする
 (find-or-install-package 'dimmer)
 (use-package dimmer
   :config
   (setq dimmer-fraction 0.4)
-  (setq dimmer-exclusion-regexp "^\\*helm\\|^ \\*Minibuf")
+  (setq dimmer-exclusion-regexp "^ \\*Minibuf")
   (dimmer-activate))
 
 ;;-------------------------------------------------------------------------
