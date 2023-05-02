@@ -262,6 +262,8 @@
 
   :config
   (setq typescript-indent-level 2)
+  ;; 大きなファイルのパフォーマンス悪化を防ぐためfont-lock抑制
+  (setq font-lock-maximum-decoration '((typescript-mode . 1) (t . t)))
   ;; flycheckが自動で実行されるのを抑制
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (setq-local company-backends '((company-capf)))
