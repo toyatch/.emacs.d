@@ -83,7 +83,7 @@
 (define-key global-map (kbd "M-n")     'next-line)
 
 (define-key global-map (kbd "M-q")     'other-window)
-(define-key global-map (kbd "C-<tab>") 'other-window)
+(define-key global-map (kbd "M-o")     'other-window)
 (define-key global-map (kbd "C-x p")   'windmove-up)
 (define-key global-map (kbd "C-x n")   'windmove-down)
 (define-key global-map (kbd "C-x f")   'windmove-right)
@@ -104,7 +104,6 @@
 (define-key global-map (kbd "C-y") 'yank)                    ; original
 
 (define-key global-map (kbd "C-o") 'mark-sexp)
-(define-key global-map (kbd "M-o") 'mark-sexp)
 (define-key global-map (kbd "C-q") 'toggle-truncate-lines)
 
 (define-key global-map (kbd "C-x l") 'linum-mode)
@@ -118,6 +117,20 @@
   (setq dimmer-fraction 0.4)
   (setq dimmer-exclusion-regexp "^ \\*Minibuf")
   (dimmer-activate))
+
+;; ------------------------------------------------------------------------
+;; バッファ切替
+;; ------------------------------------------------------------------------
+(find-or-install-package 'iflipb)
+(use-package iflipb
+  :config
+  ;; バッファ末尾で循環させる
+  (setq iflipb-wrap-around t)
+  :bind
+  (:map global-map
+        ;; chromeのキーバインドにあわせておく
+        ("C-<tab>" . iflipb-next-buffer)
+        ("C-S-<tab>" . iflipb-previous-buffer)))
 
 ;;-------------------------------------------------------------------------
 ;; 入力補完
