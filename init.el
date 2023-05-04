@@ -73,6 +73,8 @@
 ;; 環境変数
 (setenv "LANG" "ja_JP.UTF-8")
 
+(recentf-mode t)
+
 ;;-------------------------------------------------------------------------
 ;; basic-keybind
 ;;-------------------------------------------------------------------------
@@ -184,6 +186,7 @@
   (setq consult-goto-line-numbers nil)
   :bind
   (:map global-map
+        ("C-r" . consult-recent-file)
         ("M-y" . consult-yank-pop)
         ("C-M-g" . consult-grep)
         ("C-M-s" . consult-line-multi)
