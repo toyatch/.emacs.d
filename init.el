@@ -271,7 +271,6 @@
   ; LSPはeglot
   (typescript-mode . eglot-ensure)
   ; flycheckでeslintを利用する
-  (typescript-mode . add-node-modules-path)
   (typescript-mode . flycheck-mode)
   (typescript-mode . hs-minor-mode)
   (typescript-mode . company-mode)
@@ -286,11 +285,14 @@
 
   (defun apply-prettier ()
     (interactive)
+    ;; add-node-modules-pathは遅いのでperttierが見つからない時だけ実施する
+    (if (eq (executable-find "prettier") nil) (add-node-modules-path))
     (shell-command
      (format "%s --write %s"
              (shell-quote-argument (executable-find "prettier"))
              (shell-quote-argument (expand-file-name buffer-file-name))))
     (revert-buffer t t t))
+
   (add-hook 'typescript-mode-hook
             (lambda () (add-hook 'after-save-hook 'apply-prettier t t)))
 
