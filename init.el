@@ -1,7 +1,3 @@
-;; TODO
-;; for Windows
-;; [ ] 2023/04/23 windows上でGitBashを介さずに起動したとき、git fetchなどのSSH接続ができない問題を解消したい
-;; [ ] 2023/04/23 shell-modeでgit logしたときに結果が最後まで流れるのではなく１画面で止めたい(less)
 (cd "~/")
 
 ;; Packageの初期化
@@ -408,5 +404,13 @@
 ;; 別リポジトリで管理。使わない場合は空のexperimental.elを配置しておく
 (add-to-list 'load-path "~/.emacs.d/.emacs.d-experimental")
 (load "experimental.el")
+
+;; ------------------------------------------------------------------------
+;; TODO
+;; ------------------------------------------------------------------------
+;; for Windows
+;; [ ] 2023/04/23 windows上でGitBashを介さずに起動したとき、git fetchなどのSSH接続ができない問題を解消したい
+;; [ ] 2023/04/23 shell-modeでgit logしたときに結果が最後まで流れるのではなく１画面で止めたい(less)
+;; [ ] 2023/06/02 日本語ファイル名のファイルをprettierで変換したい(コマンド直接実行した場合eshell NG, shell OK)
 
 ;; EOF
