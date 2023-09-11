@@ -49,8 +49,7 @@
 (global-whitespace-mode 1)
 
 ;; 行番号表示
-(global-linum-mode 2)
-(setq linum-format "%4d ")
+(global-display-line-numbers-mode t)
 
 ;; 環境変数
 (setenv "LANG" "ja_JP.UTF-8")
@@ -90,7 +89,7 @@
 (define-key global-map (kbd "C-o") 'mark-sexp)
 (define-key global-map (kbd "C-q") 'toggle-truncate-lines)
 
-(define-key global-map (kbd "C-x l") 'linum-mode)
+(define-key global-map (kbd "C-x l") 'display-line-numbers-mode)
 (define-key global-map (kbd "C-t")   'untabify)
 (define-key global-map (kbd "C-c C-g") 'magit)
 
@@ -319,7 +318,7 @@
 ;; NOTE: use-packageのhookではなぜかうまくいかない
 (add-hook 'shell-mode-hook
   (lambda ()
-    (linum-mode 0)
+    (display-line-numbers-mode 0)
     (font-lock-mode 0)
     (define-key shell-mode-map (kbd "C-l") 'my-git-diff-toggle)
     (define-key shell-mode-map (kbd "C-r") 'consult-history)
