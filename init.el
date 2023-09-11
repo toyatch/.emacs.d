@@ -327,7 +327,7 @@
 (use-package shell
   :ensure nil
   :config
-  (setq explicit-shell-file-name "C:/Program Files/Git/bin/bash.exe")
+  (setq explicit-shell-file-name (if (eq system-type 'gnu/linux) "bash" "C:/Program Files/Git/bin/bash.exe"))
   (setq shell-file-name "bash")
   (setq explicit-bash.exe-args '("--noediting" "-i"))
   :bind
