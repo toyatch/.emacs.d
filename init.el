@@ -302,6 +302,45 @@
   ("\\.csv\\'" . csv-mode))
 
 ;; ------------------------------------------------------------------------
+;; ansi-term-mode
+;; ------------------------------------------------------------------------
+(unless (require 'multi-term nil t)
+  (package-refresh-contents)
+  (package-install 'multi-term)
+  (require 'multi-term))
+
+(add-hook 'term-mode-hook
+  (lambda ()
+    (setq whitespace-style '(face trailing tabs tab-mark))
+    (display-line-numbers-mode 0) ))
+
+;; keybinds
+(define-key global-map    (kbd "C-x C-t") 'ansi-term)
+
+;; keybinds for term-mode
+(define-key term-raw-map (kbd "M-x")    'execute-extended-command)
+(define-key term-raw-map (kbd "M-q")    'other-window)
+(define-key term-raw-map (kbd "M-o")    'other-window)
+(define-key term-raw-map (kbd "C-y")    'term-paste)
+(define-key term-raw-map (kbd "M-y")    'consult-yank-pop)
+(define-key term-raw-map (kbd "C-r")    'term-send-reverse-search-history)
+
+(defun my/term-line-mode () (interactive) (term-line-mode) (display-line-numbers-mode 1))
+(define-key term-raw-map (kbd "M-s")    'my/term-line-mode)
+(define-key term-raw-map (kbd "C-s")    'my/term-line-mode)
+
+;; keybinds for term-mode
+(define-key term-mode-map (kbd "M-s")    'swiper-thing-at-point)
+(define-key term-mode-map (kbd "C-s")    'swiper)
+(define-key term-mode-map (kbd "C-p")    'previous-line)
+(define-key term-mode-map (kbd "C-n")    'next-line)
+(define-key term-mode-map (kbd "C-h")    'term-send-backspace)
+(define-key term-mode-map (kbd "C-z")    'undo)
+
+(defun my/term-char-mode () (interactive) (term-char-mode) (display-line-numbers-mode 0))
+(define-key term-mode-map (kbd "RET")    'my/term-char-mode)
+
+;; ------------------------------------------------------------------------
 ;; shell-mode
 ;; ------------------------------------------------------------------------
 ;;
