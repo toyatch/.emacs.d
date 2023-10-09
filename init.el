@@ -49,7 +49,7 @@
 (global-whitespace-mode 1)
 
 ;; 行番号表示
-(global-display-line-numbers-mode t)
+(global-display-line-numbers-mode 0)
 
 ;; 環境変数
 (setenv "LANG" "ja_JP.UTF-8")
