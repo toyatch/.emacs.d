@@ -1,30 +1,3 @@
-(cd "~/")
-
-;; Packageの初期化
-(require 'package)
-(customize-set-variable
- 'package-archives '(("org"   . "https://orgmode.org/elpa/")
-                     ("melpa" . "https://melpa.org/packages/")
-                     ("gnu"   . "https://elpa.gnu.org/packages/")))
-(package-initialize)
-
-;; パッケージがインストールされていなければ自動インストール
-(unless package-archive-contents
-  (package-refresh-contents))
-
-(dolist (package '(use-package))
-  (unless (package-installed-p package)
-    (package-install package)))
-
-;; use-packageの初期化
-(eval-when-compile
-  (require 'use-package))
-
-(defun find-or-install-package (x)
-  (unless (package-installed-p x)
-    (package-refresh-contents)
-    (package-install x)))
-
 ;;-------------------------------------------------------------------------
 ;; basic
 ;;-------------------------------------------------------------------------
@@ -93,27 +66,33 @@
 (define-key global-map (kbd "C-t")   'untabify)
 (define-key global-map (kbd "C-c C-g") 'magit)
 
-;; ウィンドウがアクティブでないときに、背景を暗くする
-(find-or-install-package 'dimmer)
-(use-package dimmer
-  :config
-  (setq dimmer-fraction 0.4)
-  (setq dimmer-exclusion-regexp "^ \\*Minibuf")
-  (dimmer-activate))
+;;-------------------------------------------------------------------------
+;; Package
+;;-------------------------------------------------------------------------
+;; Packageの初期化
+(require 'package)
+;;(customize-set-variable
+;; 'package-archives '(("org"   . "https://orgmode.org/elpa/")
+;;                     ("melpa" . "https://melpa.org/packages/")
+;;                     ("gnu"   . "https://elpa.gnu.org/packages/")))
+(package-initialize)
 
-;; ------------------------------------------------------------------------
-;; バッファ切替
-;; ------------------------------------------------------------------------
-(find-or-install-package 'iflipb)
-(use-package iflipb
-  :config
-  ;; バッファ末尾で循環させる
-  (setq iflipb-wrap-around t)
-  :bind
-  (:map global-map
-        ;; chromeのキーバインドにあわせておく
-        ("C-<tab>" . iflipb-next-buffer)
-        ("C-S-<tab>" . iflipb-previous-buffer)))
+;; パッケージがインストールされていなければ自動インストール
+(unless package-archive-contents
+  (package-refresh-contents))
+
+(dolist (package '(use-package))
+  (unless (package-installed-p package)
+    (package-install package)))
+
+;; use-packageの初期化
+(eval-when-compile
+  (require 'use-package))
+
+(defun find-or-install-package (x)
+  (unless (package-installed-p x)
+    (package-refresh-contents)
+    (package-install x)))
 
 ;;-------------------------------------------------------------------------
 ;; 入力補完
@@ -222,13 +201,7 @@
         ("m"   . undo-tree-visualizer-quit)))
 
 ;; ------------------------------------------------------------------------
-;; flycheck
-;; ------------------------------------------------------------------------
-(use-package flycheck
-  :ensure t)
-
-;; ------------------------------------------------------------------------
-;; lsp(eglog)
+;; lsp(eglot)
 ;; ------------------------------------------------------------------------
 (find-or-install-package 'eglot)
 (use-package eglot
@@ -241,7 +214,6 @@
 ;; ------------------------------------------------------------------------
 ;; TypeScripts
 ;; ------------------------------------------------------------------------
-(find-or-install-package 'add-node-modules-path)
 (use-package typescript-mode
   :ensure t
   :mode
@@ -267,7 +239,7 @@
   (defun apply-prettier ()
     (interactive)
     ;; add-node-modules-pathは遅いのでperttierが見つからない時だけ実施する
-    (if (eq (executable-find "prettier") nil) (add-node-modules-path))
+    ;; (if (eq (executable-find "prettier") nil) (add-node-modules-path))
     (shell-command
      (format "%s --write %s"
              (shell-quote-argument (executable-find "prettier"))
@@ -300,45 +272,6 @@
   :ensure t
   :mode
   ("\\.csv\\'" . csv-mode))
-
-;; ------------------------------------------------------------------------
-;; ansi-term-mode
-;; ------------------------------------------------------------------------
-(unless (require 'multi-term nil t)
-  (package-refresh-contents)
-  (package-install 'multi-term)
-  (require 'multi-term))
-
-(add-hook 'term-mode-hook
-  (lambda ()
-    (setq whitespace-style '(face trailing tabs tab-mark))
-    (display-line-numbers-mode 0) ))
-
-;; keybinds
-(define-key global-map    (kbd "C-x C-t") 'ansi-term)
-
-;; keybinds for term-mode
-(define-key term-raw-map (kbd "M-x")    'execute-extended-command)
-(define-key term-raw-map (kbd "M-q")    'other-window)
-(define-key term-raw-map (kbd "M-o")    'other-window)
-(define-key term-raw-map (kbd "C-y")    'term-paste)
-(define-key term-raw-map (kbd "M-y")    'consult-yank-pop)
-(define-key term-raw-map (kbd "C-r")    'term-send-reverse-search-history)
-
-(defun my/term-line-mode () (interactive) (term-line-mode) (display-line-numbers-mode 1))
-(define-key term-raw-map (kbd "M-s")    'my/term-line-mode)
-(define-key term-raw-map (kbd "C-s")    'my/term-line-mode)
-
-;; keybinds for term-mode
-(define-key term-mode-map (kbd "M-s")    'swiper-thing-at-point)
-(define-key term-mode-map (kbd "C-s")    'swiper)
-(define-key term-mode-map (kbd "C-p")    'previous-line)
-(define-key term-mode-map (kbd "C-n")    'next-line)
-(define-key term-mode-map (kbd "C-h")    'term-send-backspace)
-(define-key term-mode-map (kbd "C-z")    'undo)
-
-(defun my/term-char-mode () (interactive) (term-char-mode) (display-line-numbers-mode 0))
-(define-key term-mode-map (kbd "RET")    'my/term-char-mode)
 
 ;; ------------------------------------------------------------------------
 ;; shell-mode
@@ -436,12 +369,93 @@
 (define-key global-map (kbd "C-x M-w") 'my/copy-to-clip)
 
 ;; ------------------------------------------------------------------------
+;; 以下、ELPAに追加されていないもの
+;; ------------------------------------------------------------------------
+
+;; ------------------------------------------------------------------------
+;; flycheck
+;; ------------------------------------------------------------------------
+;; not elpa
+;; (use-package flycheck
+;;   :ensure t)
+
+;; ウィンドウがアクティブでないときに、背景を暗くする
+;; not elpa
+;; (find-or-install-package 'dimmer)
+;; (use-package dimmer
+;;   :config
+;;   (setq dimmer-fraction 0.4)
+;;   (setq dimmer-exclusion-regexp "^ \\*Minibuf")
+;;   (dimmer-activate))
+
+;; ------------------------------------------------------------------------
+;; バッファ切替
+;; ------------------------------------------------------------------------
+;; not elpa
+;; (find-or-install-package 'iflipb)
+;; (use-package iflipb
+;;   :config
+;;   ;; バッファ末尾で循環させる
+;;   (setq iflipb-wrap-around t)
+;;   :bind
+;;   (:map global-map
+;;         ;; chromeのキーバインドにあわせておく
+;;         ("C-<tab>" . iflipb-next-buffer)
+;;         ("C-S-<tab>" . iflipb-previous-buffer)))
+
+;; ------------------------------------------------------------------------
+;; add-node-modules-path
+;; ------------------------------------------------------------------------
+;; not elpa
+;; (find-or-install-package 'add-node-modules-path)
+
+;; ------------------------------------------------------------------------
+;; ansi-term-mode
+;; ------------------------------------------------------------------------
+;; not elpa
+;;(unless (require 'multi-term nil t)
+;;  (package-refresh-contents)
+;;  (package-install 'multi-term)
+;;  (require 'multi-term))
+
+;; (add-hook 'term-mode-hook
+;;  (lambda ()
+;;    (setq whitespace-style '(face trailing tabs tab-mark))
+;;    (display-line-numbers-mode 0) ))
+
+;; ;; keybinds
+;; (define-key global-map    (kbd "C-x C-t") 'ansi-term)
+
+;; ;; keybinds for term-mode
+;; (define-key term-raw-map (kbd "M-x")    'execute-extended-command)
+;; (define-key term-raw-map (kbd "M-q")    'other-window)
+;; (define-key term-raw-map (kbd "M-o")    'other-window)
+;; (define-key term-raw-map (kbd "C-y")    'term-paste)
+;; (define-key term-raw-map (kbd "M-y")    'consult-yank-pop)
+;; (define-key term-raw-map (kbd "C-r")    'term-send-reverse-search-history)
+
+;; (defun my/term-line-mode () (interactive) (term-line-mode) (display-line-numbers-mode 1))
+;; (define-key term-raw-map (kbd "M-s")    'my/term-line-mode)
+;; (define-key term-raw-map (kbd "C-s")    'my/term-line-mode)
+
+;; ;; keybinds for term-mode
+;; (define-key term-mode-map (kbd "M-s")    'swiper-thing-at-point)
+;; (define-key term-mode-map (kbd "C-s")    'swiper)
+;; (define-key term-mode-map (kbd "C-p")    'previous-line)
+;; (define-key term-mode-map (kbd "C-n")    'next-line)
+;; (define-key term-mode-map (kbd "C-h")    'term-send-backspace)
+;; (define-key term-mode-map (kbd "C-z")    'undo)
+
+;; (defun my/term-char-mode () (interactive) (term-char-mode) (display-line-numbers-mode 0))
+;; (define-key term-mode-map (kbd "RET")    'my/term-char-mode)
+
+;; ------------------------------------------------------------------------
 ;; experimental
 ;; ------------------------------------------------------------------------
 ;; 実験的機能
 ;; 別リポジトリで管理。使わない場合は空のexperimental.elを配置しておく
 (add-to-list 'load-path "~/.emacs.d/.emacs.d-experimental")
-(load "experimental.el")
+(load "experimental.el" t)
 
 ;; ------------------------------------------------------------------------
 ;; TODO
