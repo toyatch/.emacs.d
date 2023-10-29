@@ -67,16 +67,6 @@
 (define-key global-map (kbd "C-c C-g") 'magit)
 
 ;;-------------------------------------------------------------------------
-;; 入力補完
-;;-------------------------------------------------------------------------
-;; fido-vertical-mode
-;; NOTE: verticoとどちらを使うか悩ましいがpackage不要のこちらで。
-(fido-vertical-mode +1)
-(add-to-list 'completion-ignored-extensions "./")
-(define-key icomplete-minibuffer-map (kbd "C-l") 'icomplete-fido-backward-updir)
-(define-key icomplete-minibuffer-map (kbd "TAB") 'icomplete-force-complete)
-
-;;-------------------------------------------------------------------------
 ;; Package
 ;;-------------------------------------------------------------------------
 ;; Packageの初期化
@@ -103,6 +93,32 @@
   (unless (package-installed-p x)
     (package-refresh-contents)
     (package-install x)))
+
+;;-------------------------------------------------------------------------
+;; 入力補完
+;;-------------------------------------------------------------------------
+;; 候補表示と絞り込み
+(find-or-install-package 'vertico)
+(use-package vertico
+  :init
+  (vertico-mode +1))
+
+(use-package vertico-directory
+  :after vertico
+  :ensure nil
+  :bind
+  (:map vertico-map
+        ("C-l" . vertico-directory-delete-word)
+        ("C-m" . vertico-directory-enter))
+  :hook
+  (rfn-eshadow-setup-minibuffer . vertico-directory-tidy))
+
+;; verticoと連携し候補表示を中間一致で行う
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-defaults '((file (styles basic partial-completion)))))
 
 ;; ミニバッファ詳細化
 (find-or-install-package 'marginalia)
