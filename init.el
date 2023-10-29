@@ -98,6 +98,7 @@
 ;; 入力補完
 ;;-------------------------------------------------------------------------
 ;; 候補表示と絞り込み
+;; swiperとの相性はfido-vertical-modeよりもverticoのほうが良い
 (find-or-install-package 'vertico)
 (use-package vertico
   :init
