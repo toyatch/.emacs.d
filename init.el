@@ -263,6 +263,21 @@
   ("M-]" . hs-show-block))
 
 ;; ------------------------------------------------------------------------
+;; C#
+;; ------------------------------------------------------------------------
+(use-package csharp-mode
+  :init
+  ;; Language Servier
+  (add-to-list 'eglot-server-programs '(csharp-mode . ("OmniSharp" "-lsp")))
+  :hook
+  ;; LSP
+  (csharp-mode . eglot-ensure)
+  (csharp-mode . company-mode)
+  :config
+  (setq-local company-backends '((company-capf)))
+  )
+
+;; ------------------------------------------------------------------------
 ;; csv-mode
 ;; ------------------------------------------------------------------------
 (find-or-install-package 'csv-mode)
