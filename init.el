@@ -71,10 +71,7 @@
 ;;-------------------------------------------------------------------------
 ;; Packageの初期化
 (require 'package)
-;;(customize-set-variable
-;; 'package-archives '(("org"   . "https://orgmode.org/elpa/")
-;;                     ("melpa" . "https://melpa.org/packages/")
-;;                     ("gnu"   . "https://elpa.gnu.org/packages/")))
+;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
 
 ;; パッケージがインストールされていなければ自動インストール
