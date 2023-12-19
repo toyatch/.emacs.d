@@ -71,10 +71,11 @@
 ;;-------------------------------------------------------------------------
 ;; Packageの初期化
 (require 'package)
-;;(customize-set-variable
-;; 'package-archives '(("org"   . "https://orgmode.org/elpa/")
-;;                     ("melpa" . "https://melpa.org/packages/")
-;;                     ("gnu"   . "https://elpa.gnu.org/packages/")))
+(customize-set-variable
+ 'package-archives '(("gnu"          . "https://elpa.gnu.org/packages/")
+                     ("org"          . "https://orgmode.org/elpa/")
+                     ("melpa-stable" . "https://stable.melpa.org/packages/")
+                     ))
 (package-initialize)
 
 ;; パッケージがインストールされていなければ自動インストール
@@ -166,6 +167,7 @@
   :ensure t
   :diminish company-mode
   :config
+  (global-company-mode t)
   (setq company-idle-delay 0.2)
   (setq company-minimum-prefix-length 2)
   :bind (("C-<return>" . company-complete))
@@ -201,15 +203,9 @@
         ("m"   . undo-tree-visualizer-quit)))
 
 ;; ------------------------------------------------------------------------
-;; lsp(eglot)
+;; lsp(lsp) melpa-stable
 ;; ------------------------------------------------------------------------
-(find-or-install-package 'eglot)
-(use-package eglot
-  :init
-  ;; フォーカスが当たると太字になるのが画面のちらつきになって邪魔なのでOFF
-  (with-eval-after-load 'eglot
-    (add-to-list 'eglot-ignored-server-capabilites :documentHighlightProvider))
-  )
+(find-or-install-package 'lsp-mode)
 
 ;; ------------------------------------------------------------------------
 ;; TypeScripts
@@ -221,19 +217,18 @@
   ("\\.tsx\\'" . typescript-mode)
 
   :hook
-  ; LSPはeglot
-  (typescript-mode . eglot-ensure)
+  (typescript-mode . lsp)
   ; flycheckでeslintを利用する
-  (typescript-mode . flycheck-mode)
+  ;; (typescript-mode . flycheck-mode)
   (typescript-mode . hs-minor-mode)
   (typescript-mode . company-mode)
 
   :config
   (setq typescript-indent-level 2)
   ;; 大きなファイルのパフォーマンス悪化を防ぐためfont-lock抑制
-  (setq font-lock-maximum-decoration '((typescript-mode . 1) (t . t)))
+  ;; (setq font-lock-maximum-decoration '((typescript-mode . 1) (t . t)))
   ;; flycheckが自動で実行されるのを抑制
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  ;; (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (setq-local company-backends '((company-capf)))
 
   (defun apply-prettier ()
@@ -241,8 +236,7 @@
     ;; add-node-modules-pathは遅いのでperttierが見つからない時だけ実施する
     ;; (if (eq (executable-find "prettier") nil) (add-node-modules-path))
     (shell-command
-     (format "%s --write %s"
-             (shell-quote-argument (executable-find "prettier"))
+     (format "yarn prettier --write %s"
              (shell-quote-argument (expand-file-name buffer-file-name))))
     (revert-buffer t t t))
 
@@ -253,13 +247,8 @@
   :bind
   ("C-x C-p" . flymake-goto-prev-error)
   ("C-x C-n" . flymake-goto-next-error)
-  ("C-x C-e" . flymake-show-project-diagnostics)
-  ("C-c C-f C-c" . flycheck-buffer)
-  ("C-x e"   . flycheck-list-errors)
-
-  ("C-x C-j" . xref-find-definitions)
-  ("C-x C-h" . xref-go-back)
-  ("C-x C-r" . xref-find-references)
+  ("C-x C-e" . flymake-show-buffer-diagnostics)
+  ("C-x C-r" . lsp-find-references)
 
   ("M-[" . hs-hide-block)
   ("M-]" . hs-show-block))
@@ -456,13 +445,5 @@
 ;; 別リポジトリで管理。使わない場合は空のexperimental.elを配置しておく
 (add-to-list 'load-path "~/.emacs.d/.emacs.d-experimental")
 (load "experimental.el" t)
-
-;; ------------------------------------------------------------------------
-;; TODO
-;; ------------------------------------------------------------------------
-;; for Windows
-;; [ ] 2023/04/23 windows上でGitBashを介さずに起動したとき、git fetchなどのSSH接続ができない問題を解消したい
-;; [ ] 2023/04/23 shell-modeでgit logしたときに結果が最後まで流れるのではなく１画面で止めたい(less)
-;; [ ] 2023/06/02 日本語ファイル名のファイルをprettierで変換したい(コマンド直接実行した場合eshell NG, shell OK)
 
 ;; EOF
