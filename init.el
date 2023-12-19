@@ -99,6 +99,7 @@
 ;; 入力補完
 ;;-------------------------------------------------------------------------
 ;; 候補表示と絞り込み
+;; swiperとの相性はfido-vertical-modeよりもverticoのほうが良い
 (find-or-install-package 'vertico)
 (use-package vertico
   :init
@@ -252,6 +253,21 @@
 
   ("M-[" . hs-hide-block)
   ("M-]" . hs-show-block))
+
+;; ------------------------------------------------------------------------
+;; C#
+;; ------------------------------------------------------------------------
+(use-package csharp-mode
+  :init
+  ;; Language Servier
+  (add-to-list 'eglot-server-programs '(csharp-mode . ("OmniSharp" "-lsp")))
+  :hook
+  ;; LSP
+  (csharp-mode . eglot-ensure)
+  (csharp-mode . company-mode)
+  :config
+  (setq-local company-backends '((company-capf)))
+  )
 
 ;; ------------------------------------------------------------------------
 ;; csv-mode
