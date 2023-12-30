@@ -2,6 +2,7 @@
 ;; basic
 ;;-------------------------------------------------------------------------
 (load-theme 'wheatgrass)              ;; theme
+(toggle-frame-fullscreen)             ;; 最大化で起動
 (setq inhibit-startup-screen t)       ;; スタートアップメッセージ非表示
 (menu-bar-mode 0)                     ;; メニューバー非表示
 (setq ring-bell-function 'ignore)     ;; beep抑止
