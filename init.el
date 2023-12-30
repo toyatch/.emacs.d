@@ -204,34 +204,43 @@
         ("m"   . undo-tree-visualizer-quit)))
 
 ;; ------------------------------------------------------------------------
-;; lsp(lsp) melpa-stable
+;; web-mode
 ;; ------------------------------------------------------------------------
-(find-or-install-package 'lsp-mode)
+(find-or-install-package 'web-mode)
+(use-package web-mode
+  :config
+  (setq-default indent-tabs-mode nil)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-markup-indent-offset 2))
 
 ;; ------------------------------------------------------------------------
-;; TypeScripts
+;; typescript-tsx-mode
+;; ------------------------------------------------------------------------
+(define-derived-mode typescript-tsx-mode web-mode "typescript-tsx")
+
+;; ------------------------------------------------------------------------
+;; typescript-tsx-mode
 ;; ------------------------------------------------------------------------
 (use-package typescript-mode
   :ensure t
   :mode
   ("\\.ts\\'" . typescript-mode)
-  ("\\.tsx\\'" . typescript-mode)
-
-  :hook
-  (typescript-mode . lsp)
-  ; flycheckでeslintを利用する
-  ;; (typescript-mode . flycheck-mode)
-  (typescript-mode . hs-minor-mode)
-  (typescript-mode . company-mode)
-
+  ("\\.tsx\\'" . typescript-tsx-mode)
   :config
   (setq typescript-indent-level 2)
-  ;; 大きなファイルのパフォーマンス悪化を防ぐためfont-lock抑制
-  ;; (setq font-lock-maximum-decoration '((typescript-mode . 1) (t . t)))
-  ;; flycheckが自動で実行されるのを抑制
-  ;; (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (setq-local company-backends '((company-capf)))
+  ;; 大きなファイルのパフォーマンス悪化を防ぐためfont-lock抑制
+  (setq font-lock-maximum-decoration '((typescript-mode . 1) (t . t))))
 
+;; ------------------------------------------------------------------------
+;; lsp(eglot)
+;; ------------------------------------------------------------------------
+(use-package eglot
+  :ensure t
+  :init
+  ;; フォーカスが当たると太字になるのが画面のちらつきになって邪魔なのでOFF
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-ignored-server-capabilities :documentHighlightProvider))
   (defun apply-prettier ()
     (interactive)
     ;; add-node-modules-pathは遅いのでperttierが見つからない時だけ実施する
@@ -239,35 +248,38 @@
     (shell-command
      (format "yarn prettier --write %s"
              (shell-quote-argument (expand-file-name buffer-file-name))))
-    (revert-buffer t t t))
-
-  (add-hook 'typescript-mode-hook
-            (lambda () (add-hook 'after-save-hook 'apply-prettier t t)))
-
-
+    (revert-buffer t t t)
+    ;; revert-bufferがLSPに認知されない？のでreconnect
+    (call-interactively 'eglot-reconnect)
+    )
+  :hook
+  ((js-mode typescript-mode typescript-tsx-mode) . eglot-ensure)
+  ((js-mode typescript-mode typescript-tsx-mode) .
+   (lambda () (add-hook 'after-save-hook 'apply-prettier t t)))
+  :config
+  (cl-pushnew '((typescript-mode typescript-tsx-mode) .
+                ("typescript-language-server" "--stdio"))
+              eglot-server-programs :test #'equal)
   :bind
   ("C-x C-p" . flymake-goto-prev-error)
   ("C-x C-n" . flymake-goto-next-error)
   ("C-x C-e" . flymake-show-buffer-diagnostics)
-  ("C-x C-r" . lsp-find-references)
-
-  ("M-[" . hs-hide-block)
-  ("M-]" . hs-show-block))
+  )
 
 ;; ------------------------------------------------------------------------
 ;; C#
 ;; ------------------------------------------------------------------------
-(use-package csharp-mode
-  :init
-  ;; Language Servier
-  (add-to-list 'eglot-server-programs '(csharp-mode . ("OmniSharp" "-lsp")))
-  :hook
-  ;; LSP
-  (csharp-mode . eglot-ensure)
-  (csharp-mode . company-mode)
-  :config
-  (setq-local company-backends '((company-capf)))
-  )
+;; (use-package csharp-mode
+;;   :init
+;;   ;; Language Servier
+;;   (add-to-list 'eglot-server-programs '(csharp-mode . ("OmniSharp" "-lsp")))
+;;   :hook
+;;   ;; LSP
+;;   (csharp-mode . eglot-ensure)
+;;   (csharp-mode . company-mode)
+;;   :config
+;;   (setq-local company-backends '((company-capf)))
+;;   )
 
 ;; ------------------------------------------------------------------------
 ;; csv-mode
