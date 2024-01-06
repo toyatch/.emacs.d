@@ -154,6 +154,7 @@
         ("C-M-g" . consult-grep)
         ("C-M-s" . consult-line-multi)
         ("C-x C-b" . consult-buffer)
+        ("C-<tab>" . consult-buffer)
         ("C-x C-g" . consult-goto-line))
   (:map minibuffer-local-map
         ("M-y" . yank-pop)))
@@ -264,7 +265,7 @@
   :bind
   ("C-x C-p" . flymake-goto-prev-error)
   ("C-x C-n" . flymake-goto-next-error)
-  ("C-x C-e" . flymake-show-buffer-diagnostics)
+  ("C-x C-e" . flymake-show-project-diagnostics)
   )
 
 ;; ------------------------------------------------------------------------
