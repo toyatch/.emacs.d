@@ -168,7 +168,6 @@
         ("C-M-g" . consult-grep)
         ("C-M-s" . consult-line-multi)
         ("C-x C-b" . consult-buffer)
-        ("C-<tab>" . consult-buffer)
         ("C-x C-g" . consult-goto-line))
   (:map minibuffer-local-map
         ("M-y" . yank-pop)))
@@ -438,16 +437,16 @@
 ;; バッファ切替
 ;; ------------------------------------------------------------------------
 ;; not elpa
-;; (find-or-install-package 'iflipb)
-;; (use-package iflipb
-;;   :config
-;;   ;; バッファ末尾で循環させる
-;;   (setq iflipb-wrap-around t)
-;;   :bind
-;;   (:map global-map
-;;         ;; chromeのキーバインドにあわせておく
-;;         ("C-<tab>" . iflipb-next-buffer)
-;;         ("C-S-<tab>" . iflipb-previous-buffer)))
+(find-or-install-package 'iflipb)
+(use-package iflipb
+  :config
+  ;; バッファ末尾で循環させる
+  (setq iflipb-wrap-around t)
+  :bind
+  (:map global-map
+        ;; chromeのキーバインドにあわせておく
+        ("C-<tab>" . iflipb-next-buffer)
+        ("C-S-<tab>" . iflipb-previous-buffer)))
 
 ;; ------------------------------------------------------------------------
 ;; add-node-modules-path
