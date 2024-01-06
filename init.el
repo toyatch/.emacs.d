@@ -165,6 +165,11 @@
   (:map global-map
         ("C-x C-a" . embark-act)))
 
+;; dired
+(use-package dired
+  :bind
+  (:map dired-mode-map ("r" . wdired-change-to-wdired-mode)))
+
 ;; オートコンプリート
 (use-package company
   :ensure t
