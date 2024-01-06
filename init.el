@@ -163,11 +163,11 @@
   (setq consult-goto-line-numbers nil)
   :bind
   (:map global-map
-        ("C-r" . consult-recent-file)
         ("M-y" . consult-yank-pop)
         ("C-M-g" . consult-grep)
         ("C-M-s" . consult-line-multi)
         ("C-x C-b" . consult-buffer)
+        ("C-r" . consult-buffer)
         ("C-x C-g" . consult-goto-line))
   (:map minibuffer-local-map
         ("M-y" . yank-pop)))
