@@ -68,22 +68,17 @@
 (define-key global-map (kbd "C-c C-g") 'magit)
 
 ;;-------------------------------------------------------------------------
+;; PROXY
+;;-------------------------------------------------------------------------
+;; プロキシが必要な場合は必要に応じて以下の環境変数を設定しておくこと
+;; HTTP_PROXY
+;; HTTPS_PROXY
+;; NODE_TLS_REJECT_UNAUTHORIZED
+(setq url-proxy-services '((getenv "HTTP_PROXY") (getenv "HTTPS_PROXY")))
+
+;;-------------------------------------------------------------------------
 ;; Package
 ;;-------------------------------------------------------------------------
-;; プロキシが必要な場合conf/proxy.elに入れる。passは入力を促されるのでダミーでOK
-;; NOTE!! conf/proxy.elはgitignoreで管理対象外になっていること
-;; [example]
-;; ```proxy.el
-;; (setq url-proxy-services
-;;       '(("http" . "proxy.example.com:8080")
-;;         ("https" . "proxy.example.com:8080")))
-;; (setq url-http-proxy-basic-auth-storage
-;;       '(("proxy.example.com:8080"
-;;          ("Proxy" . (base64-encode-string "username:pass")))))
-;; ```
-(add-to-list 'load-path "~/.emacs.d/conf")
-(load "proxy.el" t)
-
 ;; Packageの初期化
 (require 'package)
 (customize-set-variable
