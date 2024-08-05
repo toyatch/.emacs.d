@@ -110,6 +110,29 @@
     (package-refresh-contents)
     (package-install x)))
 
+;; quelpa: githubにあるelispをインストールするためのパッケージ
+(unless (package-installed-p 'quelpa)
+  (with-temp-buffer
+    (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
+    (eval-buffer)
+    (quelpa-self-upgrade)))
+(quelpa
+ '(quelpa-use-package
+   :fetcher git
+   :url "https://github.com/quelpa/quelpa-use-package.git"))
+(require 'quelpa-use-package)
+
+;; ------------------------------------------------------------------------
+;; copipot
+;; ------------------------------------------------------------------------
+(use-package copilot
+  :quelpa (copilot :fetcher github
+                   :repo "copilot-emacs/copilot.el"
+                   :branch "main"
+                   :files ("*.el")))
+(define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+(define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+
 ;;-------------------------------------------------------------------------
 ;; 入力補完
 ;;-------------------------------------------------------------------------
@@ -499,7 +522,7 @@
 ;; ------------------------------------------------------------------------
 ;; 実験的機能
 ;; 別リポジトリで管理。使わない場合は空のexperimental.elを配置しておく
-(add-to-list 'load-path "~/.emacs.d/.emacs.d-experimental")
-(load "experimental.el" t)
+;; (add-to-list 'load-path "~/.emacs.d/.emacs.d-experimental")
+;; (load "experimental.el" t)
 
 ;; EOF
