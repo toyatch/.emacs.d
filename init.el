@@ -129,7 +129,9 @@
   :quelpa (copilot :fetcher github
                    :repo "copilot-emacs/copilot.el"
                    :branch "main"
-                   :files ("*.el")))
+                   :files ("*.el"))
+  :config (setq copilot-proxy (getenv "HTTP_PROXY"))
+  )
 (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
 (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
 
@@ -262,7 +264,7 @@
 (define-derived-mode typescript-tsx-mode web-mode "typescript-tsx")
 
 ;; ------------------------------------------------------------------------
-;; typescript-tsx-mode
+;; ts/tsx
 ;; ------------------------------------------------------------------------
 (use-package typescript-mode
   :ensure t
@@ -274,6 +276,10 @@
   (setq-local company-backends '((company-capf)))
   ;; 大きなファイルのパフォーマンス悪化を防ぐためfont-lock抑制
   (setq font-lock-maximum-decoration '((typescript-mode . 1) (t . t))))
+
+;; copilotをhook
+(add-hook 'typescript-mode-hook 'copilot-mode)
+(add-hook 'typescript-tsx-mode-hook 'copilot-mode)
 
 ;; ------------------------------------------------------------------------
 ;; lsp(eglot)
