@@ -118,7 +118,7 @@
 (require 'quelpa-use-package)
 
 ;; ------------------------------------------------------------------------
-;; copipot
+;; copilot
 ;; ------------------------------------------------------------------------
 (use-package copilot
   :quelpa (copilot :fetcher github
