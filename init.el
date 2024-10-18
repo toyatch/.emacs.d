@@ -1,3 +1,16 @@
+(add-to-list 'load-path "~/.emacs.d/.ENV")
+(load ".my-env.el" t)
+;;-------------------------------------------------------------------------
+;; PROXY
+;;-------------------------------------------------------------------------
+;; プロキシが必要な場合は必要に応じて以下の環境変数を設定しておくこと
+;; ``` env.el
+;; HTTP_PROXY
+;; HTTPS_PROXY
+;; NODE_TLS_REJECT_UNAUTHORIZED
+;; ```
+(setq url-proxy-services '((getenv "HTTP_PROXY") (getenv "HTTPS_PROXY")))
+
 ;;-------------------------------------------------------------------------
 ;; basic
 ;;-------------------------------------------------------------------------
@@ -66,15 +79,6 @@
 (define-key global-map (kbd "C-x l") 'display-line-numbers-mode)
 (define-key global-map (kbd "C-t")   'untabify)
 (define-key global-map (kbd "C-c C-g") 'magit)
-
-;;-------------------------------------------------------------------------
-;; PROXY
-;;-------------------------------------------------------------------------
-;; プロキシが必要な場合は必要に応じて以下の環境変数を設定しておくこと
-;; HTTP_PROXY
-;; HTTPS_PROXY
-;; NODE_TLS_REJECT_UNAUTHORIZED
-(setq url-proxy-services '((getenv "HTTP_PROXY") (getenv "HTTPS_PROXY")))
 
 ;;-------------------------------------------------------------------------
 ;; Package
