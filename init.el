@@ -111,6 +111,7 @@
     (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
     (eval-buffer)
     (quelpa-self-upgrade)))
+(setq quelpa-update-melpa-p nil) ;; M-x quelpa-self-upgrade で手動更新
 (quelpa
  '(quelpa-use-package
    :fetcher git
