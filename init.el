@@ -40,8 +40,6 @@
 ;; 環境変数
 (setenv "LANG" "ja_JP.UTF-8")
 
-(recentf-mode t)
-
 ;;-------------------------------------------------------------------------
 ;; 起動時のウィンドウを画面左半分相当にリサイズ
 ;;-------------------------------------------------------------------------
@@ -62,6 +60,20 @@
           (lambda ()
             (set-frame-position (selected-frame) (/ (display-pixel-width) 2) 0)
             (set-frame-size (selected-frame) (/ (display-pixel-width) (frame-char-width) 2) (/ (display-pixel-height) (frame-char-height)))))
+
+;;-------------------------------------------------------------------------
+;; recentf
+;;-------------------------------------------------------------------------
+(require 'recentf)
+(recentf-mode t)
+(setq recentf-max-menu-items 25)
+
+(defun display-recentf-list ()
+  "Display the list of recent files."
+  (interactive)
+  (recentf-open-files))
+
+(add-hook 'emacs-startup-hook 'display-recentf-list)
 
 ;;-------------------------------------------------------------------------
 ;; basic-keybind
