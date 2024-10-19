@@ -101,6 +101,21 @@
 (define-key global-map (kbd "C-c C-g") 'magit)
 
 ;;-------------------------------------------------------------------------
+;; hideshow
+;;-------------------------------------------------------------------------
+(require 'hideshow)
+(setq hs-set-up-overlay
+      (lambda (ov)
+        (let ((display-string (propertize " [...] " 'face '(:foreground "red" :weight bold))))
+          (overlay-put ov 'display display-string))))
+(global-set-key (kbd "C-,") 'hs-hide-block)
+(global-set-key (kbd "C-.") 'hs-show-block)
+(global-set-key (kbd "C-x C-,") 'hs-hide-all)
+(global-set-key (kbd "C-x C-.") 'hs-show-all)
+(global-set-key (kbd "C-c @ C-l") 'hs-hide-level)
+(global-set-key (kbd "C-c @ C-t") 'hs-toggle-hiding)
+
+;;-------------------------------------------------------------------------
 ;; Package
 ;;-------------------------------------------------------------------------
 ;; Packageの初期化
@@ -297,7 +312,10 @@
   ;; 大きなファイルのパフォーマンス悪化を防ぐためfont-lock抑制
   (setq font-lock-maximum-decoration '((typescript-mode . 1) (t . t))))
 
-;; copilotをhook
+;; Enable hideshow for TypeScript
+(add-hook 'typescript-mode-hook 'hs-minor-mode)
+
+;; Enable copilot for TypeScript
 (add-hook 'typescript-mode-hook 'copilot-mode)
 (add-hook 'typescript-tsx-mode-hook 'copilot-mode)
 
