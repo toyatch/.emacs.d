@@ -15,7 +15,6 @@
 ;; basic
 ;;-------------------------------------------------------------------------
 (load-theme 'wheatgrass)              ;; theme
-;; (toggle-frame-fullscreen)          ;; 最大化で起動
 (setq inhibit-startup-screen t)       ;; スタートアップメッセージ非表示
 (menu-bar-mode 0)                     ;; メニューバー非表示
 (setq ring-bell-function 'ignore)     ;; beep抑止
@@ -42,6 +41,27 @@
 (setenv "LANG" "ja_JP.UTF-8")
 
 (recentf-mode t)
+
+;;-------------------------------------------------------------------------
+;; 起動時のウィンドウを画面左半分相当にリサイズ
+;;-------------------------------------------------------------------------
+;; (toggle-frame-fullscreen)          ;; 最大化で起動
+(setq initial-frame-alist
+      '((top . 0)
+        (left . 0)
+        (width . 0.5)
+        (height . 1.0)))
+
+(setq default-frame-alist
+      '((top . 0)
+        (left . 0)
+        (width . 0.5)
+        (height . 1.0)))
+
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (set-frame-position (selected-frame) (/ (display-pixel-width) 2) 0)
+            (set-frame-size (selected-frame) (/ (display-pixel-width) (frame-char-width) 2) (/ (display-pixel-height) (frame-char-height)))))
 
 ;;-------------------------------------------------------------------------
 ;; basic-keybind
