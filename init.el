@@ -467,16 +467,15 @@
   (set-background-color "Black")
   (set-foreground-color "LightGray")
   (set-cursor-color "Gray")
-  (set-frame-parameter nil 'alpha 85)
+  (set-frame-parameter nil 'alpha 100)
 
   ;;; ClipBorard
   (setq x-select-enable-clipboard t)))
 
-(setq my-next-alpha 15)
+(setq my-next-alpha 20)
 (defun set-alpha-toggle () (interactive)
-       (set-frame-parameter nil 'alpha (+ 30 my-next-alpha))
-       (setq my-next-alpha (- 70 my-next-alpha))
-       )
+       (set-frame-parameter nil 'alpha my-next-alpha)
+       (setq my-next-alpha (if (>= my-next-alpha 100) 20 (+  my-next-alpha 20))))
 (define-key global-map (kbd "C-M-<return>") 'set-alpha-toggle)
 
 ;; ------------------------------------------------------------------------
