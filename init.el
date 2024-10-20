@@ -1,5 +1,10 @@
+(when (eq system-type 'windows-nt)
+  (setenv "HOME" (getenv "USERPROFILE"))
+  (setq default-directory (getenv "USERPROFILE")))
+
 (add-to-list 'load-path "~/.emacs.d/.ENV")
 (load ".my-env.el" t)
+
 ;;-------------------------------------------------------------------------
 ;; PROXY
 ;;-------------------------------------------------------------------------
