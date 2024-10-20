@@ -138,6 +138,7 @@
 (global-set-key (kbd "C-x C-.") 'hs-show-all)
 (global-set-key (kbd "C-c @ C-l") 'hs-hide-level)
 (global-set-key (kbd "C-c @ C-t") 'hs-toggle-hiding)
+(add-hook 'prog-mode-hook #'hs-minor-mode)
 
 ;;-------------------------------------------------------------------------
 ;; Package
