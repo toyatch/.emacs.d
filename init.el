@@ -369,6 +369,9 @@
   ((js-mode typescript-mode typescript-tsx-mode) . eglot-ensure)
   ((js-mode typescript-mode typescript-tsx-mode) .
    (lambda () (add-hook 'after-save-hook 'apply-prettier t t)))
+  ((js-mode typescript-mode typescript-tsx-mode) .
+   (lambda () (setq web-mode-enable-auto-indentation nil)))
+
   :config
   (cl-pushnew '((typescript-mode typescript-tsx-mode) .
                 ("typescript-language-server" "--stdio"))
