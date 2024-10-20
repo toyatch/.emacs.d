@@ -483,15 +483,18 @@
 ;; Clipbord extention for WSL
 ;; WindowsとWSL(Linux)でクリップボードを共有したい
 ;; ------------------------------------------------------------------------
-(defun my/yank-from-powershell () (interactive)
-  (let ((pastable (shell-command-to-string "powershell.exe -command 'Get-Clipboard'")))
-    (insert pastable)))
-(define-key global-map (kbd "C-x C-y") 'my/yank-from-powershell)
+(when (eq system-type 'windows-nt)
+  (defun my/yank-from-powershell () (interactive)
+         (let ((pastable
+                (shell-command-to-string
+                 "powershell.exe -command 'Get-Clipboard'")))
+           (insert pastable)))
+  (define-key global-map (kbd "C-x C-y") 'my/yank-from-powershell)
 
-(defun my/copy-to-clip (start end) (interactive "r")
-       (shell-command-on-region start end "clip.exe")
-       (kill-ring-save start end))
-(define-key global-map (kbd "C-x M-w") 'my/copy-to-clip)
+  (defun my/copy-to-clip (start end) (interactive "r")
+         (shell-command-on-region start end "clip.exe")
+         (kill-ring-save start end))
+  (define-key global-map (kbd "C-x M-w") 'my/copy-to-clip))
 
 ;; ------------------------------------------------------------------------
 ;; 起動時にファイルが指定されていない場合はホームディレクトリに移動
