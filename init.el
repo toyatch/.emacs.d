@@ -127,7 +127,10 @@
 (require 'hideshow)
 (setq hs-set-up-overlay
       (lambda (ov)
-        (let ((display-string (propertize " [...] " 'face '(:foreground "red" :weight bold))))
+        (let ((display-string
+               (propertize " [...] "
+                           'face
+                           '(:foreground "red" :weight bold))))
           (overlay-put ov 'display display-string))))
 (global-set-key (kbd "C-,") 'hs-hide-block)
 (global-set-key (kbd "C-.") 'hs-show-block)
@@ -168,7 +171,8 @@
 ;; quelpa: githubにあるelispをインストールするためのパッケージ
 (unless (package-installed-p 'quelpa)
   (with-temp-buffer
-    (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
+    (url-insert-file-contents
+     "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
     (eval-buffer)
     (quelpa-self-upgrade)))
 (setq quelpa-update-melpa-p nil) ;; M-x quelpa-self-upgrade で手動更新
@@ -424,7 +428,9 @@
 (use-package shell
   :ensure nil
   :config
-  (setq explicit-shell-file-name (if (eq system-type 'gnu/linux) "bash" "C:/Program Files/Git/bin/bash.exe"))
+  (setq explicit-shell-file-name
+        (if (eq system-type 'gnu/linux)
+            "bash" "C:/Program Files/Git/bin/bash.exe"))
   (setq shell-file-name "bash")
   (setq explicit-bash.exe-args '("--noediting" "-i"))
   :bind
@@ -570,7 +576,8 @@
 ;; (define-key term-raw-map (kbd "M-y")    'consult-yank-pop)
 ;; (define-key term-raw-map (kbd "C-r")    'term-send-reverse-search-history)
 
-;; (defun my/term-line-mode () (interactive) (term-line-mode) (display-line-numbers-mode 1))
+;; (defun my/term-line-mode () (interactive)
+;;        (term-line-mode) (display-line-numbers-mode 1))
 ;; (define-key term-raw-map (kbd "M-s")    'my/term-line-mode)
 ;; (define-key term-raw-map (kbd "C-s")    'my/term-line-mode)
 
@@ -582,7 +589,8 @@
 ;; (define-key term-mode-map (kbd "C-h")    'term-send-backspace)
 ;; (define-key term-mode-map (kbd "C-z")    'undo)
 
-;; (defun my/term-char-mode () (interactive) (term-char-mode) (display-line-numbers-mode 0))
+;; (defun my/term-char-mode () (interactive)
+;;        (term-char-mode) (display-line-numbers-mode 0))
 ;; (define-key term-mode-map (kbd "RET")    'my/term-char-mode)
 
 ;; ------------------------------------------------------------------------
