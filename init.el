@@ -459,24 +459,25 @@
 ;; ------------------------------------------------------------------------
 ;; for WindowSystem
 ;; ------------------------------------------------------------------------
-(if window-system (progn
-  (tool-bar-mode 0)                     ;; ツールバー非表示
-  (scroll-bar-mode 0)                   ;; スクロールバー非表示
+(when (eq system-type 'windows-nt)
+  (if window-system (progn
+                      (tool-bar-mode 0)                     ;; ツールバー非表示
+                      (scroll-bar-mode 0)                   ;; スクロールバー非表示
 
-  ;; Colors
-  (set-background-color "Black")
-  (set-foreground-color "LightGray")
-  (set-cursor-color "Gray")
-  (set-frame-parameter nil 'alpha 100)
+                      ;; Colors
+                      (set-background-color "Black")
+                      (set-foreground-color "LightGray")
+                      (set-cursor-color "Gray")
+                      (set-frame-parameter nil 'alpha 100)
 
   ;;; ClipBorard
-  (setq x-select-enable-clipboard t)))
+                      (setq x-select-enable-clipboard t)))
 
-(setq my-next-alpha 20)
-(defun set-alpha-toggle () (interactive)
-       (set-frame-parameter nil 'alpha my-next-alpha)
-       (setq my-next-alpha (if (>= my-next-alpha 100) 20 (+  my-next-alpha 20))))
-(define-key global-map (kbd "C-M-<return>") 'set-alpha-toggle)
+  (setq my-next-alpha 20)
+  (defun set-alpha-toggle () (interactive)
+         (set-frame-parameter nil 'alpha my-next-alpha)
+         (setq my-next-alpha (if (>= my-next-alpha 100) 20 (+  my-next-alpha 20))))
+  (define-key global-map (kbd "C-M-<return>") 'set-alpha-toggle))
 
 ;; ------------------------------------------------------------------------
 ;; Clipbord extention for WSL
