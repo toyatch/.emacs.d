@@ -49,22 +49,26 @@
 ;; 起動時のウィンドウを画面左半分相当にリサイズ
 ;;-------------------------------------------------------------------------
 ;; (toggle-frame-fullscreen)          ;; 最大化で起動
-(setq initial-frame-alist
-      '((top . 0)
-        (left . 0)
-        (width . 0.5)
-        (height . 1.0)))
+(when (eq system-type 'windows-nt)
+  (setq initial-frame-alist
+        '((top . 0)
+          (left . 0)
+          (width . 0.5)
+          (height . 1.0)))
 
-(setq default-frame-alist
-      '((top . 0)
-        (left . 0)
-        (width . 0.5)
-        (height . 1.0)))
+  (setq default-frame-alist
+        '((top . 0)
+          (left . 0)
+          (width . 0.5)
+          (height . 1.0)))
 
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (set-frame-position (selected-frame) (/ (display-pixel-width) 2) 0)
-            (set-frame-size (selected-frame) (/ (display-pixel-width) (frame-char-width) 2) (/ (display-pixel-height) (frame-char-height)))))
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (set-frame-position (selected-frame) (/ (display-pixel-width) 2) 0)
+              (set-frame-size
+               (selected-frame)
+               (/ (display-pixel-width) (frame-char-width) 2)
+               (/ (display-pixel-height) (frame-char-height))))))
 
 ;;-------------------------------------------------------------------------
 ;; recentf
