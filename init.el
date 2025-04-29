@@ -197,16 +197,27 @@
 (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
 
 ;;-------------------------------------------------------------------------
-;; 入力補完
+;; 入力補完のインクリメンタルサーチ
 ;;-------------------------------------------------------------------------
-;; 候補表示と絞り込み
-;; swiperとの相性はfido-vertical-modeよりもverticoのほうが良い
 (find-or-install-package 'vertico)
 (use-package vertico
+  ;;
+  ;; 目的:
+  ;;   ミニバッファの補完をインクリメンタルサーチにしたい
+  ;; メモ:
+  ;;   fido-vertical-modeでなくverticoを使う理由
+  ;;   -> fido-vertical-modeはswiperと組み合わせたときswiperの行移動ができなくなる
+  ;;
   :init
+  (setq resize-mini-windows t)
   (vertico-mode +1))
 
+;; FIXME: あとで場所移動
 (use-package vertico-directory
+  ;;
+  ;; 目的:
+  ;;   C-l/C-mで上下ディレクトリ移動をしたい
+  ;;
   :after vertico
   :ensure nil
   :bind
@@ -216,25 +227,40 @@
   :hook
   (rfn-eshadow-setup-minibuffer . vertico-directory-tidy))
 
-;; verticoと連携し候補表示を中間一致で行う
 (use-package orderless
+  ;;
+  ;; 目的:
+  ;;   vertico単体ではできない中間一致の絞り込みをしたい
+  ;;
   :ensure t
   :custom
   (completion-styles '(orderless basic))
   (completion-category-defaults '((file (styles basic partial-completion)))))
 
-;; ミニバッファ詳細化
+;;-------------------------------------------------------------------------
+;; find-file+verticoのインクリメンタルサーチ拡張
+;;-------------------------------------------------------------------------
 (find-or-install-package 'marginalia)
 (use-package marginalia
+  ;;
+  ;; 目的:
+  ;;   ファイルサイズ/権限/更新日などを確認したい
+  ;;
   :bind (("M-A" . marginalia-cycle)
          :map minibuffer-local-map
          ("M-A" . marginalia-cycle))
   :init
   (marginalia-mode))
 
-;; バッファ、検索機能など
+;;-------------------------------------------------------------------------
+;; ファイル内検索のインクリメンタルサーチ化
+;;-------------------------------------------------------------------------
 (find-or-install-package 'swiper)
 (use-package swiper
+  ;;
+  ;; 目的:
+  ;;   ファイル・バッファの検索がインクリメンタルサーチになる
+  ;;
   :config
   :bind
   (:map global-map
@@ -243,8 +269,17 @@
   (:map minibuffer-local-map
         ("M-y" . yank-pop)))
 
+;;-------------------------------------------------------------------------
+;; バッファのインクリメンタルサーチ化
+;;-------------------------------------------------------------------------
 (find-or-install-package 'consult)
 (use-package consult
+  ;;
+  ;; 目的:
+  ;;   - バッファ選択のインクリメンタルサーチ化
+  ;;   - 行ジャンプのインクリメンタルサーチ化
+  ;;   - yank-popのインクリメンタルサーチ化
+  ;;
   :config
   (setq consult-goto-line-numbers nil)
   :bind
@@ -258,14 +293,20 @@
   (:map minibuffer-local-map
         ("M-y" . yank-pop)))
 
+;; FIXME: 使わないかも
 (find-or-install-package 'embark-consult)
 (use-package embark-consult
   :bind
   (:map global-map
         ("C-x C-a" . embark-act)))
 
-;; dired
+;;-------------------------------------------------------------------------
+;; ファイルマネージャ(dired)の便利化
+;;-------------------------------------------------------------------------
 (use-package dired
+  ;;
+  ;; 目的
+  ;;   diredバッファ上で直感的にリネームをしたい
   :bind
   (:map dired-mode-map ("r" . wdired-change-to-wdired-mode)))
 
@@ -285,6 +326,10 @@
 ;; ------------------------------------------------------------------------
 (find-or-install-package 'undo-tree)
 (use-package undo-tree
+  ;;
+  ;; 目的
+  ;;   undo/redoを木構造で可視化したい
+  ;;
   :init
   (defun undo-tree-visualize-start ()
     (interactive)
@@ -534,12 +579,14 @@
 ;;   (setq dimmer-exclusion-regexp "^ \\*Minibuf")
 ;;   (dimmer-activate))
 
-;; ------------------------------------------------------------------------
-;; バッファ切替
-;; ------------------------------------------------------------------------
-;; not elpa
 (find-or-install-package 'iflipb)
 (use-package iflipb
+  ;;
+  ;; 目的:
+  ;;   バッファをTABブラウザのように切り替えしたい
+  ;; メモ:
+  ;;   not elpa
+  ;;
   :config
   ;; バッファ末尾で循環させる
   (setq iflipb-wrap-around t)
