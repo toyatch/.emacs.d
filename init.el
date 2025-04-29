@@ -310,6 +310,23 @@
   (:map global-map
         ("C-x C-a" . embark-act)))
 
+(find-or-install-package 'iflipb)
+(use-package iflipb
+  ;;
+  ;; 目的:
+  ;;   バッファをTABブラウザのように切り替えしたい
+  ;; メモ:
+  ;;   not elpa
+  ;;
+  :config
+  ;; バッファ末尾で循環させる
+  (setq iflipb-wrap-around t)
+  :bind
+  (:map global-map
+        ;; chromeのキーバインドにあわせておく
+        ("C-<tab>" . iflipb-next-buffer)
+        ("C-S-<tab>" . iflipb-previous-buffer)))
+
 ;;-------------------------------------------------------------------------
 ;; ファイルマネージャ(dired)の便利化
 ;;-------------------------------------------------------------------------
@@ -559,10 +576,6 @@
               (cd "~/"))))
 
 ;; ------------------------------------------------------------------------
-;; 以下、ELPAに追加されていないもの
-;; ------------------------------------------------------------------------
-
-;; ------------------------------------------------------------------------
 ;; flycheck
 ;; ------------------------------------------------------------------------
 ;; not elpa
@@ -577,23 +590,6 @@
 ;;   (setq dimmer-fraction 0.4)
 ;;   (setq dimmer-exclusion-regexp "^ \\*Minibuf")
 ;;   (dimmer-activate))
-
-(find-or-install-package 'iflipb)
-(use-package iflipb
-  ;;
-  ;; 目的:
-  ;;   バッファをTABブラウザのように切り替えしたい
-  ;; メモ:
-  ;;   not elpa
-  ;;
-  :config
-  ;; バッファ末尾で循環させる
-  (setq iflipb-wrap-around t)
-  :bind
-  (:map global-map
-        ;; chromeのキーバインドにあわせておく
-        ("C-<tab>" . iflipb-next-buffer)
-        ("C-S-<tab>" . iflipb-previous-buffer)))
 
 ;; ------------------------------------------------------------------------
 ;; add-node-modules-path
