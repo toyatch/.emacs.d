@@ -212,7 +212,19 @@
   (setq resize-mini-windows t)
   (vertico-mode +1))
 
-;; FIXME: あとで場所移動
+(use-package orderless
+  ;;
+  ;; 目的:
+  ;;   vertico単体ではできない中間一致の絞り込みをしたい
+  ;;
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-defaults '((file (styles basic partial-completion)))))
+
+;;-------------------------------------------------------------------------
+;; find-file+verticoのインクリメンタルサーチ拡張
+;;-------------------------------------------------------------------------
 (use-package vertico-directory
   ;;
   ;; 目的:
@@ -227,19 +239,6 @@
   :hook
   (rfn-eshadow-setup-minibuffer . vertico-directory-tidy))
 
-(use-package orderless
-  ;;
-  ;; 目的:
-  ;;   vertico単体ではできない中間一致の絞り込みをしたい
-  ;;
-  :ensure t
-  :custom
-  (completion-styles '(orderless basic))
-  (completion-category-defaults '((file (styles basic partial-completion)))))
-
-;;-------------------------------------------------------------------------
-;; find-file+verticoのインクリメンタルサーチ拡張
-;;-------------------------------------------------------------------------
 (find-or-install-package 'marginalia)
 (use-package marginalia
   ;;
