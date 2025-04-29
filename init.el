@@ -93,7 +93,7 @@
 (define-key global-map (kbd "M-p")     'previous-line)
 (define-key global-map (kbd "M-n")     'next-line)
 
-(define-key global-map (kbd "M-q")     'other-window)
+(define-key global-map (kbd "C-q")     'other-window)
 (define-key global-map (kbd "M-o")     'other-window)
 (define-key global-map (kbd "C-x p")   'windmove-up)
 (define-key global-map (kbd "C-x n")   'windmove-down)
@@ -115,7 +115,7 @@
 (define-key global-map (kbd "C-y") 'yank)                    ; original
 
 (define-key global-map (kbd "C-o") 'mark-sexp)
-(define-key global-map (kbd "C-q") 'toggle-truncate-lines)
+(define-key global-map (kbd "C-c C-q") 'toggle-truncate-lines)
 
 (define-key global-map (kbd "C-x l") 'display-line-numbers-mode)
 (define-key global-map (kbd "C-t")   'untabify)
@@ -195,6 +195,8 @@
   )
 (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
 (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+(define-key copilot-completion-map (kbd "C-p") 'copilot-previous-completion)
+(define-key copilot-completion-map (kbd "C-n") 'copilot-next-completion)
 
 ;; オートコンプリート
 ;; emacs30: 補完できないときにcompany-completeすると落ちる？？
