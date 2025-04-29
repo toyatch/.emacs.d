@@ -540,6 +540,20 @@
   (setq my-git-diff-toggle-status (- 1 my-git-diff-toggle-status)))
 
 ;; ------------------------------------------------------------------------
+;; shell-mode
+;; ------------------------------------------------------------------------
+;; Eshell で ANSI カラーを有効にする
+;; gitで色つけるには以下も必要
+;;   git config --global color.diff always
+;;   git config --global color.status always
+;; shell-mode で ANSI カラーを有効化
+(require 'ansi-color)
+(defun my/eshell-ansi-color (text)
+  "TEXT 内の ANSI エスケープだけ Emacs の色プロパティへ変換する。"
+  (ansi-color-apply text))
+(add-hook 'eshell-preoutput-filter-functions #'my/eshell-ansi-color)
+
+;; ------------------------------------------------------------------------
 ;; for WindowSystem
 ;; ------------------------------------------------------------------------
 (when (eq system-type 'windows-nt)
