@@ -197,6 +197,7 @@
 (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
 
 ;; オートコンプリート
+;; emacs30: 補完できないときにcompany-completeすると落ちる？？
 (use-package company
   :ensure t
   :diminish company-mode
