@@ -196,6 +196,17 @@
 (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
 (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
 
+;; オートコンプリート
+(use-package company
+  :ensure t
+  :diminish company-mode
+  :config
+  (global-company-mode t)
+  (setq company-idle-delay 0.2)
+  (setq company-minimum-prefix-length 2)
+  :bind (("C-<return>" . company-complete))
+  )
+
 ;;-------------------------------------------------------------------------
 ;; 入力補完のインクリメンタルサーチ
 ;;-------------------------------------------------------------------------
@@ -308,17 +319,6 @@
   ;;   diredバッファ上で直感的にリネームをしたい
   :bind
   (:map dired-mode-map ("r" . wdired-change-to-wdired-mode)))
-
-;; オートコンプリート
-(use-package company
-  :ensure t
-  :diminish company-mode
-  :config
-  (global-company-mode t)
-  (setq company-idle-delay 0.2)
-  (setq company-minimum-prefix-length 2)
-  :bind (("C-<return>" . company-complete))
-  )
 
 ;; ------------------------------------------------------------------------
 ;; undo-tree
