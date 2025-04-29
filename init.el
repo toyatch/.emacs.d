@@ -87,39 +87,45 @@
 ;;-------------------------------------------------------------------------
 ;; basic-keybind
 ;;-------------------------------------------------------------------------
-(define-key global-map (kbd "C-z")     'undo)
-(define-key global-map (kbd "C-x C-z") 'undo)
+(defun my/setup-keybinds ()
+  "setup keybinkds"
+  (interactive)
 
-(define-key global-map (kbd "M-p")     'previous-line)
-(define-key global-map (kbd "M-n")     'next-line)
+  (define-key global-map (kbd "C-z")     'undo)
+  (define-key global-map (kbd "C-x C-z") 'undo)
 
-;; (define-key global-map (kbd "M-q")     'other-window) ; emacs30では別機能割り当て済
-(define-key global-map (kbd "M-o")     'other-window)
-(define-key global-map (kbd "C-x p")   'windmove-up)
-(define-key global-map (kbd "C-x n")   'windmove-down)
-(define-key global-map (kbd "C-x f")   'windmove-right)
-(define-key global-map (kbd "C-x b")   'windmove-left)
-(define-key global-map (kbd "C-^")     'enlarge-window)
+  (define-key global-map (kbd "M-p")     'previous-line)
+  (define-key global-map (kbd "M-n")     'next-line)
 
-(define-key global-map (kbd "C-u") 'backward-kill-word)      ; like bash
-(define-key global-map (kbd "M-h") 'backward-kill-word)      ; like bash & default
-(define-key global-map (kbd "C-k") 'kill-line)               ; like bash & default
-(define-key global-map (kbd "C-h") 'delete-backward-char)    ; like bash
-(define-key global-map (kbd "C-d") 'delete-char)             ; like bash & default
-(define-key global-map (kbd "C-r") 'isearch-backward)        ; like bash & default
-(define-key global-map (kbd "M-g") 'grep-find)               ; like bash
-(define-key global-map (kbd "C-l") 'recenter)                ; like bash
+  ;; (define-key global-map (kbd "M-q")     'other-window) ; emacs30では別機能割り当て済
+  (define-key global-map (kbd "M-o")     'other-window)
+  (define-key global-map (kbd "C-x p")   'windmove-up)
+  (define-key global-map (kbd "C-x n")   'windmove-down)
+  (define-key global-map (kbd "C-x f")   'windmove-right)
+  (define-key global-map (kbd "C-x b")   'windmove-left)
+  (define-key global-map (kbd "C-^")     'enlarge-window)
 
-(define-key global-map (kbd "C-w") 'kill-region)             ; original
-(define-key global-map (kbd "M-w") 'kill-ring-save)          ; original
-(define-key global-map (kbd "C-y") 'yank)                    ; original
+  (define-key global-map (kbd "C-u") 'backward-kill-word)      ; like bash
+  (define-key global-map (kbd "M-h") 'backward-kill-word)      ; like bash & default
+  (define-key global-map (kbd "C-k") 'kill-line)               ; like bash & default
+  (define-key global-map (kbd "C-h") 'delete-backward-char)    ; like bash
+  (define-key global-map (kbd "C-d") 'delete-char)             ; like bash & default
+  (define-key global-map (kbd "C-r") 'isearch-backward)        ; like bash & default
+  (define-key global-map (kbd "M-g") 'grep-find)               ; like bash
+  (define-key global-map (kbd "C-l") 'recenter)                ; like bash
 
-(define-key global-map (kbd "C-o") 'mark-sexp)
-(define-key global-map (kbd "C-q") 'toggle-truncate-lines)
+  (define-key global-map (kbd "C-w") 'kill-region)             ; original
+  (define-key global-map (kbd "M-w") 'kill-ring-save)          ; original
+  (define-key global-map (kbd "C-y") 'yank)                    ; original
 
-(define-key global-map (kbd "C-x l") 'display-line-numbers-mode)
-(define-key global-map (kbd "C-t")   'untabify)
-(define-key global-map (kbd "C-c C-g") 'magit)
+  (define-key global-map (kbd "C-o") 'mark-sexp)
+  (define-key global-map (kbd "C-q") 'toggle-truncate-lines)
+
+  (define-key global-map (kbd "C-x l") 'display-line-numbers-mode)
+  (define-key global-map (kbd "C-t")   'untabify)
+  (define-key global-map (kbd "C-c C-g") 'magit)
+  )
+(my/setup-keybinds)
 
 ;;-------------------------------------------------------------------------
 ;; hideshow
