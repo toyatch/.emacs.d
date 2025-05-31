@@ -99,11 +99,11 @@
 
   ;; (define-key global-map (kbd "M-q")     'other-window) ; emacs30では別機能割り当て済
   (define-key global-map (kbd "M-o")     'other-window)
+  (define-key global-map (kbd "M-\\")    'enlarge-window)
   (define-key global-map (kbd "C-x p")   'windmove-up)
   (define-key global-map (kbd "C-x n")   'windmove-down)
   (define-key global-map (kbd "C-x f")   'windmove-right)
   (define-key global-map (kbd "C-x b")   'windmove-left)
-  (define-key global-map (kbd "C-^")     'enlarge-window)
 
   (define-key global-map (kbd "C-u") 'backward-kill-word)      ; like bash
   (define-key global-map (kbd "M-h") 'backward-kill-word)      ; like bash & default
@@ -353,9 +353,8 @@
   (setq iflipb-wrap-around t)
   :bind
   (:map global-map
-        ;; chromeのキーバインドにあわせておく
-        ("C-<tab>" . iflipb-next-buffer)
-        ("C-S-<tab>" . iflipb-previous-buffer)))
+        ("M-]" . iflipb-next-buffer)
+        ("M-[" . iflipb-previous-buffer)))
 
 ;;-------------------------------------------------------------------------
 ;; ファイルマネージャ(dired)の便利化
