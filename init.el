@@ -683,6 +683,21 @@
 ;; (define-key term-mode-map (kbd "RET")    'my/term-char-mode)
 
 ;; ------------------------------------------------------------------------
+;; 便利関数
+;; ------------------------------------------------------------------------
+(defun my/insert-current-date ()
+  "現在の年月日挿入"
+  (interactive)
+  (insert (format-time-string "%Y-%m-%d")))
+(define-key global-map (kbd "C-;") 'my/insert-current-date)
+
+(defun my/insert-current-time ()
+  "現在の時刻挿入"
+  (interactive)
+  (insert (format-time-string "%H:%M:%S %z")))
+(define-key global-map (kbd "C-:") 'my/insert-current-time)
+
+;; ------------------------------------------------------------------------
 ;; experimental
 ;; ------------------------------------------------------------------------
 ;; 実験的機能
