@@ -216,6 +216,15 @@
   :config
   (setq copilot-chat-user-interface 'buffer))
 
+(defun my/copilot-mode-line-lightblue ()
+  "copilot時のmode-lineを目立たせる"
+  (if copilot-mode
+      (set-face-background 'mode-line "lightblue")
+    (set-face-background 'mode-line "gray"))) ; 無効時はwheatgrassの灰色
+(add-hook 'window-configuration-change-hook #'my/copilot-mode-line-lightblue)
+(add-hook 'find-file-hook #'my/copilot-mode-line-lightblue)
+(add-hook 'copilot-mode-hook #'my/copilot-mode-line-lightblue)
+
 ;; オートコンプリート
 ;; emacs30: 補完できないときにcompany-completeすると落ちる？？
 (use-package company
