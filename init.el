@@ -200,12 +200,21 @@
   :config (setq copilot-proxy (getenv "HTTP_PROXY"))
   )
 
+(define-key global-map (kbd "M-c") 'copilot-mode)
 (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
 (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
 (define-key copilot-completion-map (kbd "M-p") 'copilot-previous-completion)
 (define-key copilot-completion-map (kbd "M-n") 'copilot-next-completion)
 (define-key copilot-completion-map (kbd "M-f") 'copilot-accept-completion-by-word)
 (define-key copilot-mode-map (kbd "M-i") 'copilot-complete)
+
+(use-package copilot-chat
+  :ensure t
+  :after copilot
+  :bind
+  (:map copilot-mode-map ("C-c" . copilot-chat-transient))
+  :config
+  (setq copilot-chat-user-interface 'buffer))
 
 ;; オートコンプリート
 ;; emacs30: 補完できないときにcompany-completeすると落ちる？？
