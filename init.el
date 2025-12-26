@@ -14,7 +14,10 @@
 ;; HTTPS_PROXY
 ;; NODE_TLS_REJECT_UNAUTHORIZED
 ;; ```
-(setq url-proxy-services '((getenv "HTTP_PROXY") (getenv "HTTPS_PROXY")))
+(when (or (getenv "HTTP_PROXY") (getenv "HTTPS_PROXY"))
+  (setq url-proxy-services
+        `(("http" . ,(getenv "HTTP_PROXY"))
+          ("https" . ,(getenv "HTTPS_PROXY")))))
 
 ;;-------------------------------------------------------------------------
 ;; basic
@@ -25,7 +28,6 @@
 (setq ring-bell-function 'ignore)     ;; beep抑止
 
 ;; 文字コード設定
-(set-language-environment 'Japanese)  ;; 言語設定
 (set-language-environment "UTF-8")
 (setq default-process-coding-system '(utf-8 . utf-8))
 (prefer-coding-system 'utf-8)
@@ -88,7 +90,7 @@
 ;; basic-keybind
 ;;-------------------------------------------------------------------------
 (defun my/setup-keybinds ()
-  "setup keybinkds"
+  "setup keybinds"
   (interactive)
 
   (define-key global-map (kbd "C-z")     'undo)
@@ -388,7 +390,7 @@
   :bind
   (:map global-map
         ("C-z" . undo-tree-undo)
-        ("C-X C-z" . undo-tree-visualize-start))
+        ("C-x C-z" . undo-tree-visualize-start))
   (:map undo-tree-visualizer-mode-map
         ("C-z" . undo-tree-visualize-undo)
         ("C-y" . undo-tree-visualize-redo)
@@ -446,7 +448,7 @@
     (add-to-list 'eglot-ignored-server-capabilities :documentHighlightProvider))
   (defun apply-prettier ()
     (interactive)
-    ;; add-node-modules-pathは遅いのでperttierが見つからない時だけ実施する
+    ;; add-node-modules-pathは遅いのでprettierが見つからない時だけ実施する
     ;; (if (eq (executable-find "prettier") nil) (add-node-modules-path))
     (shell-command
      (format "yarn prettier --write %s"
@@ -557,7 +559,7 @@
   (setq my-git-diff-toggle-status (- 1 my-git-diff-toggle-status)))
 
 ;; ------------------------------------------------------------------------
-;; shell-mode
+;; eshell-mode
 ;; ------------------------------------------------------------------------
 ;; Eshell で ANSI カラーを有効にする
 ;; gitで色つけるには以下も必要
